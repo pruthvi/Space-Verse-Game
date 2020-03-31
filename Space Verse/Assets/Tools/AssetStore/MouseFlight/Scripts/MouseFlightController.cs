@@ -22,6 +22,8 @@ namespace MFlight
         private Transform cameraRig = null;
         [SerializeField] [Tooltip("Transform of the camera itself")]
         private Transform cam = null;
+        [SerializeField] [Tooltip("Reference to Joystick Controller")]
+        private Joystick joystick = null;
 
         [Header("Options")]
         [SerializeField] [Tooltip("Follow aircraft using fixed update loop")]
@@ -128,8 +130,8 @@ namespace MFlight
             }
 
             // Mouse input.
-            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-            float mouseY = -Input.GetAxis("Mouse Y") * mouseSensitivity;
+            float mouseX = joystick.Horizontal * mouseSensitivity;
+            float mouseY = -joystick.Vertical * mouseSensitivity;
 
             // Rotate the aim target that the plane is meant to fly towards.
             // Use the camera's axes in world space so that mouse motion is intuitive.
