@@ -1,78 +1,93 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GeneratePlanet : MonoBehaviour
 {
+    //  Public Variables
+    public GameObject planet = null;        //  Planet GameObject to Spawn
+    public int noOfPlanets = 200;           //  Total Number of Planets to Spawn
+    public float distToGen = 50.0f;         //  Range to Generate Planets
+    public float minPlanetSize = 2.0f;      //  Planet Minimum Size
+    public float maxPlanetSize = 10.0f;     //  Planet Maximum Size
 
-    public GameObject Planet;
-    public int NoOfPlanets;
-    public float distToGen;
-    int TotalPlanet;
-    bool initGalaxy = false;
-    float timer = 0;
+    //  Private Variables
+    private float _overlapRadiusOffset = 5.0f;      //  Overlap Circular Radius Offset
+    private Vector3 _planetPos;                     //  New Generated Planet Position
+    private float _newPlanetRadius;                 //  New Planet's Radius
+    private int _maxSpawnAttempt = 5;               //  Retry attempt if planet overlaps on each other
 
-    void Start()
+    private void Start()
     {
-        CreateGalaxy(NoOfPlanets);
-        // TotalPlanet = 0;
-        initGalaxy = false;
+        //  Create Galaxy on starting up the scene
+        StartCoroutine(CreateGalaxy());
     }
 
-    void FixedUpdate()
+    //  Create Galaxy with the different size planets
+    private IEnumerator CreateGalaxy()
     {
-        timer = timer + Time.deltaTime;
-        if (timer < 5)
+        //  Loop around and Generate Random Planets at random Position
+        for (int i = 0; i < noOfPlanets; i++)
         {
-            Debug.Log("Time: " + timer);
+            //  Check if we can Spawn
+            bool isValidPosition = false;
+            //  Number of Planet spawned
+            int planetCount = 0;
 
-            TotalPlanet = GameObject.FindGameObjectsWithTag("Planet").Length;
-            Debug.Log("Total Planets" + TotalPlanet + " || " + initGalaxy);
-
-            if (/*initGalaxy == true && */ TotalPlanet < NoOfPlanets)
+            while (!isValidPosition && planetCount < noOfPlanets)
             {
-                GenPlanet();
+                //  Increase planet Counter
+                planetCount++;
+
+                var pos = GenerateRandomPos();
+                _newPlanetRadius = GenerateRandom(minPlanetSize, maxPlanetSize);
+
+                _planetPos = pos;
+
+                //  This position is valid until proven invalid
+                isValidPosition = true;
+
+                //  Collecting all colliders within our planet radius check
+                Collider[] colliders = Physics.OverlapSphere(_planetPos, _newPlanetRadius + _overlapRadiusOffset);
+
+                //  Check if it collides with other memories
+                foreach (var collider in colliders)
+                {
+                    if (collider.CompareTag("Planet"))
+                    {
+                        //  Spawn position is not valid
+                        isValidPosition = false;
+                    }
+                }
             }
 
+            //  If It has valid Position then Spawn Planet
+            if (isValidPosition)
+            {
+                var newPlanet = Instantiate(planet, _planetPos, Quaternion.identity);
+                newPlanet.transform.localScale *= _newPlanetRadius;
+                newPlanet.transform.parent = gameObject.transform;
+            }
+
+            //  [Optional] Spawning Planet one by one by giving certain time limit between spawn
+            yield return new WaitForSeconds(0.01f);
         }
 
-
-        // while (TotalPlanet <= NoOfPlanets)
-        // {
-        //     GenPlanet();
-        //     TotalPlanet++;
-        // }
     }
 
-    void CreateGalaxy(int no)
+    //  Generate Random Number in Range
+    private float GenerateRandom(float min, float max)
     {
-        for (int i = 0; i <= no; i++)
-        {
-            GenPlanet();
-        }
-        initGalaxy = true;
-
+        return Random.Range(min, max);
     }
 
-    float GetRandomFloat(float min, float max)
+    //  Generate Random Planet Position inside Distance Radius
+    private Vector3 GenerateRandomPos()
     {
-        float value = Random.Range(min, max);
-        return value;
-    }
-
-    public void GenPlanet()
-    {
-        float planetSize = GetRandomFloat(0.5f, 5f);
-        Vector3 pSize = new Vector3(planetSize, planetSize, planetSize);
-
-        float x = GetRandomFloat(-distToGen, distToGen);
-        float y = GetRandomFloat(-distToGen, distToGen);
-        float z = GetRandomFloat(0, distToGen);
+        float x = GenerateRandom(-distToGen, distToGen);
+        float y = GenerateRandom(-distToGen, distToGen);
+        float z = GenerateRandom(0, distToGen);
         Vector3 pos = new Vector3(x, y, z);
-
-        GameObject p = Instantiate(Planet, pos, Quaternion.identity);
-        p.transform.localScale = pSize;
-        p.transform.parent = gameObject.transform;
+        return Random.insideUnitSphere * distToGen + pos;
 
     }
 }

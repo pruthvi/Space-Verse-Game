@@ -133,6 +133,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Planet
       objectReference: {fileID: 0}
+    - target: {fileID: 3103826983567042186, guid: fe481daa00724044399bed8191825925,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4392596955521165992, guid: fe481daa00724044399bed8191825925,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -337,7 +342,12 @@ PrefabInstance:
     - target: {fileID: 3881087803815115470, guid: ec536a7718376554185e4a856d5ae230,
         type: 3}
       propertyPath: m_Color.a
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3881087804030458057, guid: ec536a7718376554185e4a856d5ae230,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec536a7718376554185e4a856d5ae230, type: 3}
@@ -366,7 +376,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &222158308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -591,9 +601,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 922b5aa126adf7e4da5ea252a87826ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Planet: {fileID: 3103826983567042186, guid: fe481daa00724044399bed8191825925, type: 3}
-  NoOfPlanets: 200
-  distToGen: 50
+  planet: {fileID: 3103826983567042186, guid: fe481daa00724044399bed8191825925, type: 3}
+  noOfPlanets: 100
+  distToGen: 200
+  minPlanetSize: 10
+  maxPlanetSize: 100
 --- !u!4 &1226516279
 Transform:
   m_ObjectHideFlags: 0
@@ -615,9 +627,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1950386001306352, guid: 76845026de374da4aa455cd164e63143, type: 3}
-      propertyPath: m_IsActive
-      value: 1
+    - target: {fileID: 1630319604630382, guid: 76845026de374da4aa455cd164e63143, type: 3}
+      propertyPath: m_Name
+      value: Plane
       objectReference: {fileID: 0}
     - target: {fileID: 4563113176137864, guid: 76845026de374da4aa455cd164e63143, type: 3}
       propertyPath: m_LocalPosition.x
@@ -651,55 +663,22 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 96301432782237084, guid: 76845026de374da4aa455cd164e63143,
-        type: 3}
-      propertyPath: m_Parameters.colorGradient.key0.r
+    - target: {fileID: 4563113176137864, guid: 76845026de374da4aa455cd164e63143, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 96301432782237084, guid: 76845026de374da4aa455cd164e63143,
-        type: 3}
-      propertyPath: m_Parameters.colorGradient.key0.g
-      value: 0.8463757
-      objectReference: {fileID: 0}
-    - target: {fileID: 96301432782237084, guid: 76845026de374da4aa455cd164e63143,
-        type: 3}
-      propertyPath: m_Parameters.colorGradient.key0.b
-      value: 0.9339623
-      objectReference: {fileID: 0}
-    - target: {fileID: 96301432782237084, guid: 76845026de374da4aa455cd164e63143,
-        type: 3}
-      propertyPath: m_Parameters.colorGradient.key1.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 96301432782237084, guid: 76845026de374da4aa455cd164e63143,
-        type: 3}
-      propertyPath: m_Parameters.colorGradient.key1.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 96301432782237084, guid: 76845026de374da4aa455cd164e63143,
-        type: 3}
-      propertyPath: m_Parameters.colorGradient.key1.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 96301432782237084, guid: 76845026de374da4aa455cd164e63143,
-        type: 3}
-      propertyPath: m_Parameters.colorGradient.ctime1
-      value: 65535
-      objectReference: {fileID: 0}
-    - target: {fileID: 96544870946491564, guid: 76845026de374da4aa455cd164e63143,
-        type: 3}
-      propertyPath: m_Parameters.colorGradient.key0.r
+    - target: {fileID: 4563113176137864, guid: 76845026de374da4aa455cd164e63143, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 96544870946491564, guid: 76845026de374da4aa455cd164e63143,
-        type: 3}
-      propertyPath: m_Parameters.colorGradient.key0.g
-      value: 0.8463757
+    - target: {fileID: 4563113176137864, guid: 76845026de374da4aa455cd164e63143, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 96544870946491564, guid: 76845026de374da4aa455cd164e63143,
+    - target: {fileID: 54841044653712042, guid: 76845026de374da4aa455cd164e63143,
         type: 3}
-      propertyPath: m_Parameters.colorGradient.key0.b
-      value: 0.9339623
+      propertyPath: m_Mass
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 114329657595640044, guid: 76845026de374da4aa455cd164e63143,
         type: 3}
@@ -708,13 +687,13 @@ PrefabInstance:
       objectReference: {fileID: 114412279917838310}
     - target: {fileID: 114329657595640044, guid: 76845026de374da4aa455cd164e63143,
         type: 3}
-      propertyPath: turnTorque.x
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 114329657595640044, guid: 76845026de374da4aa455cd164e63143,
-        type: 3}
       propertyPath: thrust
-      value: 5
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 136863792910642262, guid: 76845026de374da4aa455cd164e63143,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76845026de374da4aa455cd164e63143, type: 3}
@@ -955,7 +934,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 0.8479441, g: 0.9651756, b: 0.9716981, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30

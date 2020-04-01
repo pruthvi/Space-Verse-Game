@@ -139,5 +139,13 @@ namespace MFlight.Demo
                                                 -turnTorque.z * roll) * forceMult,
                                     ForceMode.Force);
         }
+
+        private void OnTriggerEnter(Collider collider)
+        {
+            if (collider.CompareTag("Planet"))
+            {
+                Destroy(collider.gameObject);
+            }
+        }
     }
 }

@@ -4,28 +4,26 @@ using UnityEngine;
 
 public class PlanetManager : MonoBehaviour
 {
+    private MeshRenderer _renderer;     //  Planet's mesh Renderer
+
+    //  Cache reference
+    private void Awake()
+    {
+        _renderer = GetComponent<MeshRenderer>();
+    }
 
     void Start()
     {
-        // CheckLocation();
+        GenerateRandomColor();
     }
 
-
-    void CheckLocation()
+    //  Generate Random Color and Apply to the Planet's Material
+    private void GenerateRandomColor()
     {
-        float radius = this.gameObject.transform.localScale.x * 10;
-        Collider[] hitColliders = Physics.OverlapSphere(this.gameObject.transform.position, radius);
-        if (hitColliders.Length > 0)
-        {
-            Destroy(this.gameObject);
-        }
-    }
+        Color randomColor = Random.ColorHSV(0,1,0.5f,1,1,1);
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Planet")
-        {
-            Destroy(this.gameObject);
-        }
+        Material mat = new Material(Shader.Find("Standard"));
+        mat.SetColor("_Color", randomColor);
+        _renderer.material = mat;
     }
 }
