@@ -22,8 +22,8 @@ namespace MFlight
         private Transform cameraRig = null;
         [SerializeField] [Tooltip("Transform of the camera itself")]
         private Transform cam = null;
-        [SerializeField] [Tooltip("Reference to Joystick Controller")]
-        private Joystick joystick = null;
+        [Tooltip("Reference to Joystick Controller")]
+        public Joystick joystick = null;
 
         [Header("Options")]
         [SerializeField] [Tooltip("Follow aircraft using fixed update loop")]
@@ -44,6 +44,9 @@ namespace MFlight
 
         private Vector3 frozenDirection = Vector3.forward;
         private bool isMouseAimFrozen = false;
+
+        public float angleBtn = 0.9f;
+        public float rotateSpeed = 1;
 
         /// <summary>
         /// Get a point along the aircraft's boresight projected out to aimDistance meters.
@@ -97,7 +100,7 @@ namespace MFlight
             // rotations causing unintended rotations as it gets dragged around.
             transform.parent = null;
         }
-
+        
         private void Update()
         {
             if (useFixed == false)
@@ -135,19 +138,19 @@ namespace MFlight
 
             // Rotate the aim target that the plane is meant to fly towards.
             // Use the camera's axes in world space so that mouse motion is intuitive.
-            mouseAim.Rotate(cam.right, mouseY, Space.World);
-            mouseAim.Rotate(cam.up, mouseX, Space.World);
+            mouseAim.Rotate(cam.right * Time.deltaTime * rotateSpeed, mouseY, Space.World);
+            mouseAim.Rotate(cam.up * Time.deltaTime * rotateSpeed, mouseX, Space.World);
 
             // The up vector of the camera normally is aligned to the horizon. However, when
             // looking straight up/down this can feel a bit weird. At those extremes, the camera
             // stops aligning to the horizon and instead aligns to itself.
-            Vector3 upVec = (Mathf.Abs(mouseAim.forward.y) > 0.9f) ? cameraRig.up : Vector3.up;
+            /*Vector3 upVec = (Mathf.Abs(mouseAim.forward.y) > angleBtn) ? cameraRig.up : Vector3.up;
 
             // Smoothly rotate the camera to face the mouse aim.
             cameraRig.rotation = Damp(cameraRig.rotation,
                                       Quaternion.LookRotation(mouseAim.forward, upVec),
                                       camSmoothSpeed,
-                                      Time.deltaTime);
+                                      Time.deltaTime);*/
         }
 
         private Vector3 GetFrozenMouseAimPos()

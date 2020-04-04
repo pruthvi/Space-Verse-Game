@@ -58,13 +58,13 @@ namespace MFlight.Demo
             rollOverride = false;
             pitchOverride = false;
 
-            float keyboardRoll = Input.GetAxis("Horizontal");
+            float keyboardRoll = controller.joystick.Horizontal;
             if (Mathf.Abs(keyboardRoll) > .25f)
             {
                 rollOverride = true;
             }
 
-            float keyboardPitch = Input.GetAxis("Vertical");
+            float keyboardPitch = controller.joystick.Vertical;
             if (Mathf.Abs(keyboardPitch) > .25f)
             {
                 pitchOverride = true;
@@ -75,8 +75,8 @@ namespace MFlight.Demo
             float autoYaw = 0f;
             float autoPitch = 0f;
             float autoRoll = 0f;
-            if (controller != null)
-                RunAutopilot(controller.MouseAimPos, out autoYaw, out autoPitch, out autoRoll);
+            //if (controller != null)
+            //    RunAutopilot(controller.MouseAimPos, out autoYaw, out autoPitch, out autoRoll);
 
             // Use either keyboard or autopilot input.
             yaw = autoYaw;
