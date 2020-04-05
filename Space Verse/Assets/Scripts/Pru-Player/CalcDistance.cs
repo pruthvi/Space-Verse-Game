@@ -5,27 +5,32 @@ using UnityEngine.UI;
 
 public class CalcDistance : MonoBehaviour
 {
-  public GameObject player;
+    public GameObject player;
     public float distance;
     public int score;
-    public Text scoreText;
+
+    GameManager GM;
+    public GameObject GameManagerObj;
     // Start is called before the first frame update
     void Start()
     {
+
+        GM = GameManagerObj.GetComponent<GameManager>();
         distance = 0;
-        scoreText.text = "Score:" + score;
     }
 
     // Update is called once per frame
     void Update()
     {
-        distance = Vector3.Distance(player.transform.position, this.transform.position);
+        distance = Vector3.Distance(transform.position, player.transform.position);
 
-        if(distance<1)
+        if (distance < 120)
         {
-            float newScore = 1 / distance; 
-            score += (int)newScore;
-            scoreText.text = "Score : " + score;
+            Debug.Log("distance is less than 120");
+
+            float newScore = 120 / distance;
+            score = (int)newScore;
+            GM.Score += (int)newScore;
         }
 
     }
