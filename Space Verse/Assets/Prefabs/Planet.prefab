@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4894909819349654580}
   - component: {fileID: 8976413842243494899}
   - component: {fileID: -3502755005255801003}
-  - component: {fileID: 1134702058742799049}
+  - component: {fileID: 2467816116174653086}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Planet
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 64a2ccffdd3d5704ba4e4b8ccbf0b730, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,7 +111,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1134702058742799049
+--- !u!114 &2467816116174653086
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,6 +120,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3103826983567042186}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f486861378f2ec24bba63dcb39737c7e, type: 3}
+  m_Script: {fileID: 11500000, guid: 5162221ec2a8024449c9bf62af83ba44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  distance: 0
+  score: 0
+  scoreText: {fileID: 0}
