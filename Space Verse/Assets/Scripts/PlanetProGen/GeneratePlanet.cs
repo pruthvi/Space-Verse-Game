@@ -49,7 +49,7 @@ public class GeneratePlanet : MonoBehaviour
                 //  Collecting all colliders within our planet radius check
                 Collider[] colliders = Physics.OverlapSphere(_planetPos, _newPlanetRadius + _overlapRadiusOffset);
 
-                //  Check if it collides with other memories
+                //  Check if it collides with other Planets
                 foreach (var collider in colliders)
                 {
                     if (collider.CompareTag("Planet"))

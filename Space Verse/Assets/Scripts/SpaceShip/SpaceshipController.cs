@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
-/// SpaceShip Controller controls the Flying movement
+/// Jet Controller controls the Flying movement
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
 public class SpaceshipController : MonoBehaviour
@@ -32,35 +33,66 @@ public class SpaceshipController : MonoBehaviour
     #endregion
 
     #region Private Variables
+
+    /// <summary>
+    /// Raycast Radius around the Jet
+    /// </summary>
+    [SerializeField] private float raycastRadius = 10;
+
+    /// <summary>
+    /// Flag to check if Debug Mode is activated
+    /// </summary>
+    [SerializeField] private bool debugView = false;
+
+    /// <summary>
+    /// Player Score
+    /// </summary>
+    [SerializeField] private int playerScore = 0;
+
+    /// <summary>
+    /// Reference to GameManager
+    /// </summary>
+    [SerializeField] private GameManager gameManager = null;
+
     /// <summary>
     /// Reference to Rigidbody for Physics
     /// </summary>
-    private Rigidbody rigid;
+    private Rigidbody _rbody;
 
     /// <summary>
-    /// Flag to check if Spaceship can roll Override
+    /// Caching the Transform of Jet
     /// </summary>
-    private bool rollOverride = false;
+    private Transform _transform;
 
     /// <summary>
-    /// Flag to check if Spaceship can pitch Override
+    /// Flag to check if Jet can roll Override
     /// </summary>
-    private bool pitchOverride = false;
+    private bool _rollOverride = false;
+
+    /// <summary>
+    /// Flag to check if Jet can pitch Override
+    /// </summary>
+    private bool _pitchOverride = false;
 
     /// <summary>
     /// X axis rotation
     /// </summary>
-    private float pitch = 0f;
+    private float _pitch = 0f;
 
     /// <summary>
     /// Y axis rotation
     /// </summary>
-    private float yaw = 0f;
+    private float _yaw = 0f;
 
     /// <summary>
     /// Z axis rotation
     /// </summary>
-    private float roll = 0f;
+    private float _roll = 0f;
+
+    /// <summary>
+    /// Debug Gizmo Color
+    /// </summary>
+    private Color _gizmoColor;
 
     #endregion
 
@@ -69,7 +101,24 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        rigid = GetComponent<Rigidbody>();
+        _rbody = GetComponent<Rigidbody>();
+
+        if (gameManager == null)
+        {
+            Debug.LogError("Attach reference to GameObject Script");
+        }
+    }
+
+    /// <summary>
+    /// Caching the Transform of Jet
+    /// </summary>
+    private void Start()
+    {
+        _transform = transform;
+
+        //  Color For Debug Gizmo
+        _gizmoColor = Color.red;
+        _gizmoColor.a = 0.2f;
     }
 
     /// <summary>
@@ -77,20 +126,24 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        rollOverride = false;
-        pitchOverride = false;
+        _rollOverride = false;
+        _pitchOverride = false;
 
         float keyboardRoll = joystickController.Horizontal;
+        //float keyboardRoll = Input.GetAxis("Horizontal");
+
         if (Mathf.Abs(keyboardRoll) > .25f)
         {
-            rollOverride = true;
+            _rollOverride = true;
         }
 
-        float keyboardPitch = joystickController.Vertical;
+        float keyboardPitch = -joystickController.Vertical;
+        //float keyboardPitch = Input.GetAxis("Vertical");
+
         if (Mathf.Abs(keyboardPitch) > .25f)
         {
-            pitchOverride = true;
-            rollOverride = true;
+            _pitchOverride = true;
+            _rollOverride = true;
         }
 
         // Calculate the smooth stick inputs.
@@ -99,27 +152,51 @@ public class SpaceshipController : MonoBehaviour
         float autoRoll = 0f;
 
         // Use either keyboard or smooth autopilot input.
-        yaw = autoYaw;
-        pitch = (pitchOverride) ? keyboardPitch : autoPitch;
-        roll = (rollOverride) ? keyboardRoll : autoRoll;
+        _yaw = autoYaw;
+        _pitch = (_pitchOverride) ? keyboardPitch : autoPitch;
+        _roll = (_rollOverride) ? keyboardRoll : autoRoll;
     }
 
     /// <summary>
-    /// Appling the Input Controller to SpaceShip using Rigidbody physics
+    /// Appling the Input Controller to Jet using Rigidbody physics
     /// </summary>
     private void FixedUpdate()
     {
         // Ultra simple flight where the plane just gets pushed forward and manipulated
         // with torques to turn.
-        rigid.AddRelativeForce(Vector3.forward * thrust * forceMult, ForceMode.Force);
-        rigid.AddRelativeTorque(new Vector3(turnTorque.x * pitch,
-                                            turnTorque.y * yaw,
-                                            -turnTorque.z * roll) * forceMult,
+        _rbody.AddRelativeForce(Vector3.forward * thrust * forceMult, ForceMode.Force);
+        _rbody.AddRelativeTorque(new Vector3(turnTorque.x * _pitch,
+                                            turnTorque.y * _yaw,
+                                            -turnTorque.z * _roll) * forceMult,
                                 ForceMode.Force);
+
+        //  Physics Raycast to check the nearby planets
+        var raycaster = Physics.OverlapSphere(_transform.position, raycastRadius);
+        
+        //  Check if it collides with other Planets
+        foreach (var collider in raycaster)
+        {
+            if (collider.CompareTag("Planet"))
+            {
+                //Vector3 pos = collider.ClosestPointOnBounds(collider.transform.position);
+
+                playerScore++;
+                gameManager.SetScore(playerScore);
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!debugView)
+            return;
+
+        Gizmos.color = _gizmoColor;
+        Gizmos.DrawSphere(_transform.position, raycastRadius);
     }
 
     /// <summary>
-    /// If SpaceShip Collides with Planet then destroy the collided Planet
+    /// If Jet Collides with Planet then destroy the collided Planet
     /// </summary>
     /// <param name="collider">
     /// Planets
@@ -128,7 +205,7 @@ public class SpaceshipController : MonoBehaviour
     {
         if (collider.CompareTag("Planet"))
         {
-            Destroy(collider.gameObject);
+            //SceneManager.LoadScene("MainMenu");
         }
     }
 }

@@ -5,17 +5,12 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-
-    public int Score;
     public Text scoreText;
 
-    void Start()
-    {
-        Score = 0;
-    }
 
-    void Update()
+    //  Sets the Score to the ScoreBoard
+    public void SetScore(int score)
     {
-        scoreText.text = "Score : " + Score;
+        scoreText.text = "Score : " + score;
     }
 }
