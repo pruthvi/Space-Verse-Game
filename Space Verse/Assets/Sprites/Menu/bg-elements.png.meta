@@ -1,0 +1,428 @@
+fileFormatVersion: 2
+guid: d82575fe9aff9304a9bf28b3af63da34
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5889014671846435537
+    second: bg-elements_0
+  - first:
+      213: -2653850824210556162
+    second: bg-elements_1
+  - first:
+      213: -4882380348096456674
+    second: bg-elements_2
+  - first:
+      213: 6287264123497013512
+    second: bg-elements_3
+  - first:
+      213: 3194883380037233679
+    second: bg-elements_4
+  - first:
+      213: -7184157799273746971
+    second: bg-elements_5
+  - first:
+      213: 4467458550019646695
+    second: bg-elements_6
+  - first:
+      213: -3149934883154290825
+    second: bg-elements_7
+  - first:
+      213: 4223721560177238072
+    second: bg-elements_8
+  - first:
+      213: -6272689056416814964
+    second: bg-elements_9
+  - first:
+      213: -3290232260342536285
+    second: bg-elements_10
+  - first:
+      213: 1962077585789011065
+    second: bg-elements_11
+  - first:
+      213: 6517699181675024914
+    second: bg-elements_12
+  - first:
+      213: -8247621330406171913
+    second: bg-elements_13
+  - first:
+      213: 6656099895355753409
+    second: bg-elements_14
+  - first:
+      213: 7924223593994625751
+    second: bg-elements_15
+  - first:
+      213: 4880580942147620306
+    second: bg-elements_16
+  - first:
+      213: -1337663706772471510
+    second: bg-elements_17
+  - first:
+      213: -6033727720784036020
+    second: bg-elements_18
+  - first:
+      213: -6806456763147843226
+    second: bg-elements_19
+  - first:
+      213: -3225569170042895863
+    second: bg-elements_20
+  - first:
+      213: 1879187485095111645
+    second: bg-elements_21
+  - first:
+      213: -5505497373276956906
+    second: bg-elements_22
+  - first:
+      213: 844254300046971556
+    second: bg-elements_23
+  - first:
+      213: -1286439501453885814
+    second: bg-elements_24
+  - first:
+      213: -4517875991538746999
+    second: bg-elements_25
+  - first:
+      213: 3673164665723765005
+    second: bg-elements_26
+  - first:
+      213: -8440258759188424715
+    second: wave
+  - first:
+      213: 6505706643972516966
+    second: bg-elements_28
+  - first:
+      213: 2603634828581975539
+    second: Stars
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: bg-elements_4
+      rect:
+        serializedVersion: 2
+        x: 3560
+        y: 3744
+        width: 903
+        height: 883
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0c2be5c181865c20800000000000000
+      internalID: 3194883380037233679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bg-elements_7
+      rect:
+        serializedVersion: 2
+        x: 4833
+        y: 4000
+        width: 283
+        height: 280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7771affa9ee2944d0800000000000000
+      internalID: -3149934883154290825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bg-elements_13
+      rect:
+        serializedVersion: 2
+        x: 4876
+        y: 3520
+        width: 199
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fa943709109a8d80800000000000000
+      internalID: -8247621330406171913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bg-elements_19
+      rect:
+        serializedVersion: 2
+        x: 4197
+        y: 3116
+        width: 125
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6698485d2ab9a81a0800000000000000
+      internalID: -6806456763147843226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bg-elements_20
+      rect:
+        serializedVersion: 2
+        x: 4812
+        y: 2814
+        width: 369
+        height: 363
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 902442dfde97c33d0800000000000000
+      internalID: -3225569170042895863
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bg-elements_24
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 1945
+        width: 169
+        height: 169
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8e7fcad616a52ee0800000000000000
+      internalID: -1286439501453885814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bg-elements_26
+      rect:
+        serializedVersion: 2
+        x: 3858
+        y: 2059
+        width: 1562
+        height: 444
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d014bfd5dc3b9f230800000000000000
+      internalID: 3673164665723765005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wave
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 0
+        width: 3495
+        height: 1729
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f7d13e706d2eda80800000000000000
+      internalID: -8440258759188424715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bg-elements_28
+      rect:
+        serializedVersion: 2
+        x: 3828
+        y: 1461
+        width: 1532
+        height: 408
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66c61e659b9e84a50800000000000000
+      internalID: 6505706643972516966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Stars
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 1954
+        width: 3443
+        height: 2666
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f5b67af418f12420800000000000000
+      internalID: 2603634828581975539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: d652fd3c93308f24182b7876d28685f5
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
