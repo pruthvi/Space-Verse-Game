@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -54,15 +55,18 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     [SerializeField] private GameManager gameManager = null;
 
+    [Header("RayCast Positions")]
+    [SerializeField] private Transform centreRayCaster = null;
+    [SerializeField] private Transform leftRayCaster = null;
+    [SerializeField] private Transform rightRayCaster = null;
+    [SerializeField] private Transform forwardRayCaster = null;
+    [SerializeField] private Transform backwardRayCaster = null;
+
+
     /// <summary>
     /// Reference to Rigidbody for Physics
     /// </summary>
     private Rigidbody _rbody;
-
-    /// <summary>
-    /// Caching the Transform of Jet
-    /// </summary>
-    private Transform _transform;
 
     /// <summary>
     /// Flag to check if Jet can roll Override
@@ -94,6 +98,10 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     private Color _gizmoColor;
 
+    private RaycastHit[] _hit;
+    private Vector3[] _directions;
+    [SerializeField] private float _debugRayTime = 0.5f;
+
     #endregion
 
     /// <summary>
@@ -107,6 +115,18 @@ public class SpaceshipController : MonoBehaviour
         {
             Debug.LogError("Attach reference to GameObject Script");
         }
+
+        if(!centreRayCaster || !leftRayCaster || !rightRayCaster || !forwardRayCaster || !backwardRayCaster)
+        {
+            Debug.LogError("Attach the Transform of Raycaster Position First");
+        }
+
+        //  Initializing RaycastHit and their directions
+        _hit = new RaycastHit[6];
+        _directions = new Vector3[]
+        {
+            Vector3.up, Vector3.left, Vector3.right, Vector3.forward, Vector3.back
+        };
     }
 
     /// <summary>
@@ -114,8 +134,6 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        _transform = transform;
-
         //  Color For Debug Gizmo
         _gizmoColor = Color.red;
         _gizmoColor.a = 0.2f;
@@ -126,19 +144,25 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        //  For Testing
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("Playground");
+        }
+
         _rollOverride = false;
         _pitchOverride = false;
 
-        float keyboardRoll = joystickController.Horizontal;
-        //float keyboardRoll = Input.GetAxis("Horizontal");
+        //float keyboardRoll = joystickController.Horizontal;
+        float keyboardRoll = Input.GetAxis("Horizontal");
 
         if (Mathf.Abs(keyboardRoll) > .25f)
         {
             _rollOverride = true;
         }
 
-        float keyboardPitch = -joystickController.Vertical;
-        //float keyboardPitch = Input.GetAxis("Vertical");
+        //float keyboardPitch = -joystickController.Vertical;
+        float keyboardPitch = Input.GetAxis("Vertical");
 
         if (Mathf.Abs(keyboardPitch) > .25f)
         {
@@ -170,29 +194,50 @@ public class SpaceshipController : MonoBehaviour
                                             -turnTorque.z * _roll) * forceMult,
                                 ForceMode.Force);
 
-        //  Physics Raycast to check the nearby planets
-        var raycaster = Physics.OverlapSphere(_transform.position, raycastRadius);
-        
-        //  Check if it collides with other Planets
-        foreach (var collider in raycaster)
-        {
-            if (collider.CompareTag("Planet"))
-            {
-                //Vector3 pos = collider.ClosestPointOnBounds(collider.transform.position);
+        //  Ray casting from Jet
+        CastRay(centreRayCaster, _directions[0], _hit[0]);          //  UP
+        CastRay(centreRayCaster, -_directions[0], _hit[5]);         //  DOWN
 
-                playerScore++;
-                gameManager.SetScore(playerScore);
-            }
-        }
+        CastRay(leftRayCaster, _directions[1], _hit[1]);            //  LEFT
+        CastRay(rightRayCaster, _directions[2], _hit[2]);           //  RIGHT
+
+        CastRay(forwardRayCaster, _directions[3], _hit[3]);         //  FORWARD
+        CastRay(backwardRayCaster, _directions[4], _hit[4]);        //  BACKWARD
+
     }
 
-    private void OnDrawGizmos()
+    /// <summary>
+    /// Shooting a ray
+    /// </summary>
+    /// <param name="startPos">Ray Starting Position</param>
+    /// <param name="directionVector"> Ray shooting Direction</param>
+    /// <param name="arrayIndex"></param>
+    private void CastRay(Transform startPos, Vector3 directionVector , RaycastHit hit)
     {
-        if (!debugView)
-            return;
+        var direction = TransformedDirection(startPos, directionVector);
+        if (Physics.Raycast(startPos.position, direction, out hit, raycastRadius))
+        {
+            if (hit.collider.CompareTag("Planet"))
+            {
+                playerScore++;
+                gameManager.SetScore(playerScore);
+                if(debugView)
+                    Debug.DrawRay(startPos.position, direction * raycastRadius, Color.red, _debugRayTime);
+            }
+        }
+        if(debugView)
+            Debug.DrawRay(startPos.position, direction * raycastRadius, Color.blue);
+    }
 
-        Gizmos.color = _gizmoColor;
-        Gizmos.DrawSphere(_transform.position, raycastRadius);
+    /// <summary>
+    /// Transform the direction to given direction
+    /// </summary>
+    /// <param name="currentPos">Current Position</param>
+    /// <param name="direction">Direction to Transformed</param>
+    /// <returns>Transformed Direction</returns>
+    private Vector3 TransformedDirection(Transform currentPos, Vector3 direction)
+    {
+        return currentPos.TransformDirection(direction);
     }
 
     /// <summary>
