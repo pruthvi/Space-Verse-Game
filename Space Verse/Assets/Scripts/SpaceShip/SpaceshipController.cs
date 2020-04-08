@@ -46,9 +46,10 @@ public class SpaceshipController : MonoBehaviour
     [SerializeField] private bool debugView = false;
 
     /// <summary>
-    /// Player Score
+    /// Minimum Score player can make when jet is nearby planet
     /// </summary>
-    [SerializeField] private int playerScore = 0;
+    [Tooltip("Minimum Score player can make when jet is nearby planet")]
+    [SerializeField] private int minPlayerScore = 0;
 
     /// <summary>
     /// Reference to GameManager
@@ -94,6 +95,11 @@ public class SpaceshipController : MonoBehaviour
     private float _roll = 0f;
 
     /// <summary>
+    /// Player Score
+    /// </summary>
+    private int playerScore = 0;
+
+    /// <summary>
     /// Debug Gizmo Color
     /// </summary>
     private Color _gizmoColor;
@@ -122,10 +128,19 @@ public class SpaceshipController : MonoBehaviour
         }
 
         //  Initializing RaycastHit and their directions
-        _hit = new RaycastHit[6];
+        _hit = new RaycastHit[10];
         _directions = new Vector3[]
         {
-            Vector3.up, Vector3.left, Vector3.right, Vector3.forward, Vector3.back
+            Vector3.up,
+            -Vector3.up,
+            Vector3.left,
+            Vector3.right,
+            Vector3.forward,
+            Vector3.back,
+            (Vector3.forward + Vector3.right).normalized,
+            (Vector3.forward + Vector3.left).normalized,
+            (Vector3.back + Vector3.right).normalized,
+            (Vector3.back + Vector3.left).normalized
         };
     }
 
@@ -196,14 +211,19 @@ public class SpaceshipController : MonoBehaviour
 
         //  Ray casting from Jet
         CastRay(centreRayCaster, _directions[0], _hit[0]);          //  UP
-        CastRay(centreRayCaster, -_directions[0], _hit[5]);         //  DOWN
+        CastRay(centreRayCaster, _directions[1], _hit[1]);         //  DOWN
+        
+        CastRay(leftRayCaster, _directions[2], _hit[2]);            //  LEFT
+        CastRay(rightRayCaster, _directions[3], _hit[3]);           //  RIGHT
 
-        CastRay(leftRayCaster, _directions[1], _hit[1]);            //  LEFT
-        CastRay(rightRayCaster, _directions[2], _hit[2]);           //  RIGHT
+        CastRay(forwardRayCaster, _directions[4], _hit[4]);         //  FORWARD
+        CastRay(backwardRayCaster, _directions[5], _hit[5]);        //  BACKWARD
 
-        CastRay(forwardRayCaster, _directions[3], _hit[3]);         //  FORWARD
-        CastRay(backwardRayCaster, _directions[4], _hit[4]);        //  BACKWARD
+        CastRay(centreRayCaster, _directions[6], _hit[6]);          //  45 FORWARD RIGHT
+        CastRay(centreRayCaster, _directions[7], _hit[7]);          //  45 FORWARD LEFT
 
+        CastRay(centreRayCaster, _directions[8], _hit[8]);          //  45 BACKWARD RIGHT
+        CastRay(centreRayCaster, _directions[9], _hit[9]);          //  45 BACKWARD LEFT
     }
 
     /// <summary>
@@ -219,8 +239,8 @@ public class SpaceshipController : MonoBehaviour
         {
             if (hit.collider.CompareTag("Planet"))
             {
-                playerScore++;
-                gameManager.SetScore(playerScore);
+                playerScore += minPlayerScore + (int)(1 / hit.distance);
+                gameManager.SetScore(playerScore);      //  TODO : Dont set the score always
                 if(debugView)
                     Debug.DrawRay(startPos.position, direction * raycastRadius, Color.red, _debugRayTime);
             }

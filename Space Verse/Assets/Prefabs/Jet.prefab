@@ -671,8 +671,8 @@ MonoBehaviour:
   turnTorque: {x: 90, y: 25, z: 45}
   forceMult: 100
   raycastRadius: 20
-  debugView: 0
-  playerScore: 0
+  debugView: 1
+  minPlayerScore: 1
   gameManager: {fileID: 0}
   centreRayCaster: {fileID: 4326319008046781121}
   leftRayCaster: {fileID: 2101771612}
