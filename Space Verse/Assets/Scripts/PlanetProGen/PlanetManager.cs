@@ -20,10 +20,12 @@ public class PlanetManager : MonoBehaviour
     //  Generate Random Color and Apply to the Planet's Material
     private void GenerateRandomColor()
     {
-        Color randomColor = Random.ColorHSV(0,1,0.5f,1,1,1);
+        Color randomColor = Random.ColorHSV(0.5f, 0.75f, 0.5f, 0.5f, 1, 1);
 
         Material mat = new Material(Shader.Find("Standard"));
         mat.SetColor("_Color", randomColor);
+        mat.EnableKeyword("_EMISSION");
+        mat.SetColor("_EmissionColor", randomColor);
         _renderer.material = mat;
     }
 }

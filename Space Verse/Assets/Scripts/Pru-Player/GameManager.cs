@@ -7,10 +7,12 @@ public class GameManager : MonoBehaviour
 {
     public Text scoreText;
 
+    private int _totalScore;
 
     //  Sets the Score to the ScoreBoard
     public void SetScore(int score)
     {
-        scoreText.text = "Score : " + score;
+        _totalScore += score;
+        scoreText.text = "Score : " + _totalScore;
     }
 }

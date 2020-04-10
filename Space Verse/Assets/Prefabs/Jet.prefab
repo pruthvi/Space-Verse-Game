@@ -120,6 +120,91 @@ Transform:
   m_Father: {fileID: 4326319008478824476}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1959262749
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1959262750}
+  - component: {fileID: 1959262751}
+  m_Layer: 0
+  m_Name: Light Probe Group
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1959262750
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1959262749}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4326319008468315491}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!220 &1959262751
+LightProbeGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1959262749}
+  m_Enabled: 1
+  m_SourcePositions:
+  - {x: 6.657854, y: 0.37150764, z: 3.9707325}
+  - {x: 6.657854, y: 0.37957668, z: -8.929006}
+  - {x: 6.657854, y: -2.9392443, z: 3.9707325}
+  - {x: 6.657854, y: -2.9392443, z: -8.929006}
+  - {x: -5.620171, y: 0.37150764, z: 3.9707325}
+  - {x: -5.620171, y: 0.37957668, z: -8.929006}
+  - {x: 0.45296955, y: -2.9392443, z: 3.9707325}
+  - {x: 0.45296955, y: -2.9392443, z: -8.929006}
+  - {x: 6.657854, y: 0.37150764, z: -8.929006}
+  - {x: -5.620171, y: 0.37150764, z: -8.929006}
+  - {x: 3.4853127, y: 2.3302555, z: 3.9707325}
+  - {x: -2.8102098, y: 2.194292, z: 3.9707325}
+  - {x: 3.4853127, y: 2.3302555, z: -8.929006}
+  - {x: -2.8102098, y: 2.194292, z: -8.929006}
+  - {x: 6.657854, y: 0.37150764, z: 7.959377}
+  - {x: 6.657854, y: -2.9392443, z: 7.959377}
+  - {x: -5.620171, y: 0.37150764, z: 7.959377}
+  - {x: 0.45296955, y: -2.9392443, z: 7.959377}
+  - {x: 3.4853127, y: 2.3302555, z: 7.959377}
+  - {x: -2.8102098, y: 2.194292, z: 7.959377}
+  - {x: 6.657854, y: 0.37150764, z: 0.8306223}
+  - {x: 6.657854, y: -2.9392443, z: 0.8306223}
+  - {x: -5.620171, y: 0.37150764, z: 0.8306223}
+  - {x: 0.45296955, y: -2.9392443, z: 0.8306223}
+  - {x: 3.4853127, y: 2.3302555, z: 0.8306223}
+  - {x: -2.8102098, y: 2.194292, z: 0.8306223}
+  - {x: 6.657854, y: 0.37150764, z: -2.3818815}
+  - {x: 6.657854, y: -2.9392443, z: -2.3818815}
+  - {x: -5.620171, y: 0.37150764, z: -2.3818815}
+  - {x: 0.45296955, y: -2.9392443, z: -2.3818815}
+  - {x: 3.4853127, y: 2.3302555, z: -2.3818815}
+  - {x: -2.8102098, y: 2.194292, z: -2.3818815}
+  - {x: 6.657854, y: 0.37150764, z: -5.5219903}
+  - {x: 6.657854, y: -2.9392443, z: -5.5219903}
+  - {x: -5.620171, y: 0.37150764, z: -5.5219903}
+  - {x: 0.45296955, y: -2.9392443, z: -5.5219903}
+  - {x: 3.4853127, y: 2.3302555, z: -5.5219903}
+  - {x: -2.8102098, y: 2.194292, z: -5.5219903}
+  - {x: -5.620171, y: -2.9392443, z: 3.9707325}
+  - {x: -5.620171, y: -2.9392443, z: -8.929006}
+  - {x: -5.620171, y: -2.9392443, z: 7.959377}
+  - {x: -5.620171, y: -2.9392443, z: 0.8306223}
+  - {x: -5.620171, y: -2.9392443, z: -2.3818815}
+  - {x: -5.620171, y: -2.9392443, z: -5.5219903}
+  m_Dering: 1
 --- !u!1 &2101771611
 GameObject:
   m_ObjectHideFlags: 0
@@ -635,6 +720,7 @@ Transform:
   - {fileID: 4326319008046781121}
   - {fileID: 4326319008552412682}
   - {fileID: 4326319007161863542}
+  - {fileID: 1959262750}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -667,12 +753,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joystickController: {fileID: 0}
-  thrust: 25
+  thrust: 200
   turnTorque: {x: 90, y: 25, z: 45}
-  forceMult: 100
-  raycastRadius: 20
-  debugView: 1
+  forceMult: 50
+  raycastRadius: 30
+  debugView: 0
   minPlayerScore: 1
+  overlayScore: {fileID: 0}
   gameManager: {fileID: 0}
   centreRayCaster: {fileID: 4326319008046781121}
   leftRayCaster: {fileID: 2101771612}

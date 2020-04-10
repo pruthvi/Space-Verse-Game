@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.Profiling;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
 /// Jet Controller controls the Flying movement
@@ -52,6 +51,11 @@ public class SpaceshipController : MonoBehaviour
     [SerializeField] private int minPlayerScore = 0;
 
     /// <summary>
+    /// Screen Overlay Score
+    /// </summary>
+    [SerializeField] private Text overlayScore;
+
+    /// <summary>
     /// Reference to GameManager
     /// </summary>
     [SerializeField] private GameManager gameManager = null;
@@ -97,16 +101,63 @@ public class SpaceshipController : MonoBehaviour
     /// <summary>
     /// Player Score
     /// </summary>
-    private int playerScore = 0;
+    private int _playerScore = 0;
 
     /// <summary>
     /// Debug Gizmo Color
     /// </summary>
     private Color _gizmoColor;
 
+    /// <summary>
+    /// Array of colliders to store the information of collided objects
+    /// </summary>
+    private Collider[] _collider;
+
+    /// <summary>
+    /// Raycast hit for storing the information of collided ray to the object
+    /// </summary>
     private RaycastHit[] _hit;
+
+    /// <summary>
+    /// Array of different Directions to shot the ray towards
+    /// </summary>
     private Vector3[] _directions;
+
+    /// <summary>
+    /// Debugging Ray display time
+    /// </summary>
     [SerializeField] private float _debugRayTime = 0.5f;
+
+    /// <summary>
+    /// Flag to check if score is displaying on screen
+    /// </summary>
+    private bool _isScoreDisplaying = false;
+
+    /// <summary>
+    /// Flag to check if score is reseted
+    /// </summary>
+    private bool _scoreReseted = false;
+
+    /// <summary>
+    /// Score timer to track the elapsed time
+    /// </summary>
+    private float _scoreTimer = 0;
+
+    /// <summary>
+    /// After 2 seconds, overlay score will be hided
+    /// </summary>
+    private int _timeToHideScore = 2;     
+
+    /// <summary>
+    /// Flag to set the values for starting the score hiding timer
+    /// </summary>
+    private bool StartScoreTimer {
+        set
+        {
+            _isScoreDisplaying = value;
+            _scoreTimer = 0;
+        } 
+    }
 
     #endregion
 
@@ -128,6 +179,7 @@ public class SpaceshipController : MonoBehaviour
         }
 
         //  Initializing RaycastHit and their directions
+        //_collider = new Collider[5];
         _hit = new RaycastHit[10];
         _directions = new Vector3[]
         {
@@ -162,22 +214,26 @@ public class SpaceshipController : MonoBehaviour
         //  For Testing
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene("Playground");
+            transform.position = Vector3.zero;
         }
+
+        thrust = Input.GetKey(KeyCode.LeftShift) ? 600 : 200;
+
+        #region _____JET MOVEMENT CONTROLLER_____
 
         _rollOverride = false;
         _pitchOverride = false;
 
-        //float keyboardRoll = joystickController.Horizontal;
-        float keyboardRoll = Input.GetAxis("Horizontal");
+        float keyboardRoll = joystickController.Horizontal;
+        //float keyboardRoll = Input.GetAxis("Horizontal");
 
         if (Mathf.Abs(keyboardRoll) > .25f)
         {
             _rollOverride = true;
         }
 
-        //float keyboardPitch = -joystickController.Vertical;
-        float keyboardPitch = Input.GetAxis("Vertical");
+        float keyboardPitch = -joystickController.Vertical;
+        //float keyboardPitch = Input.GetAxis("Vertical");
 
         if (Mathf.Abs(keyboardPitch) > .25f)
         {
@@ -194,10 +250,41 @@ public class SpaceshipController : MonoBehaviour
         _yaw = autoYaw;
         _pitch = (_pitchOverride) ? keyboardPitch : autoPitch;
         _roll = (_rollOverride) ? keyboardRoll : autoRoll;
+
+        #endregion
+
+        #region _____OVERLAY SCORE HIDING TIMER_____
+
+        //  Timer to hide Overlay Score UI
+        if (_isScoreDisplaying)             //  If the Score is currently being displaying then start timer
+        {
+            if (_scoreTimer < _timeToHideScore)
+            {
+                _scoreTimer += Time.deltaTime;
+            }
+            else                            //  When Timer has passed the Time Limit, Reset the flags
+            {
+                _isScoreDisplaying = false;
+                _scoreReseted = false;
+            }
+        }
+
+        if (!_isScoreDisplaying)            //  Reset the OverlayScore and hide it.
+        {
+            if (!_scoreReseted)
+            {
+                _scoreReseted = true;
+                _playerScore = 0;
+                overlayScore.text = " ";    //  TODO: Hide with Animation
+
+            }
+        }
+
+        #endregion
     }
 
     /// <summary>
-    /// Appling the Input Controller to Jet using Rigidbody physics
+    /// Applying the Input Controller to Jet using Rigidbody physics
     /// </summary>
     private void FixedUpdate()
     {
@@ -224,14 +311,32 @@ public class SpaceshipController : MonoBehaviour
 
         CastRay(centreRayCaster, _directions[8], _hit[8]);          //  45 BACKWARD RIGHT
         CastRay(centreRayCaster, _directions[9], _hit[9]);          //  45 BACKWARD LEFT
+        
+        /*
+        var result = Physics.OverlapSphereNonAlloc(centreRayCaster.position, raycastRadius, _collider);
+        for (int i = 0; i < result; i++)
+        {
+            if(_collider[i].CompareTag("Planet"))
+            {
+                Debug.DrawLine(centreRayCaster.position, _collider[i].transform.position, Color.red);
+                //_playerScore += minPlayerScore + (int)(1 / _collider[i].distance);
+                _playerScore += minPlayerScore;
+                overlayScore.text = _playerScore.ToString();
+
+
+                StartScoreTimer = true;
+            }
+        }*/
+        
     }
+
 
     /// <summary>
     /// Shooting a ray
     /// </summary>
     /// <param name="startPos">Ray Starting Position</param>
     /// <param name="directionVector"> Ray shooting Direction</param>
-    /// <param name="arrayIndex"></param>
+    /// <param name="hit">Raycast Hit details</param>
     private void CastRay(Transform startPos, Vector3 directionVector , RaycastHit hit)
     {
         var direction = TransformedDirection(startPos, directionVector);
@@ -239,13 +344,19 @@ public class SpaceshipController : MonoBehaviour
         {
             if (hit.collider.CompareTag("Planet"))
             {
-                playerScore += minPlayerScore + (int)(1 / hit.distance);
-                gameManager.SetScore(playerScore);      //  TODO : Dont set the score always
-                if(debugView)
+                _playerScore += minPlayerScore + (int)(1 / hit.distance);
+
+                //  Start Overlay Score Timer
+                overlayScore.text = _playerScore.ToString();
+
+                StartScoreTimer = true;
+
+                //gameManager.SetScore(playerScore);      //  TODO : Don't set the score always
+                if (debugView)
                     Debug.DrawRay(startPos.position, direction * raycastRadius, Color.red, _debugRayTime);
             }
         }
-        if(debugView)
+        if (debugView)
             Debug.DrawRay(startPos.position, direction * raycastRadius, Color.blue);
     }
 
@@ -260,17 +371,26 @@ public class SpaceshipController : MonoBehaviour
         return currentPos.TransformDirection(direction);
     }
 
+    /*
     /// <summary>
     /// If Jet Collides with Planet then destroy the collided Planet
     /// </summary>
-    /// <param name="collider">
+    /// <param name="other">
     /// Planets
     /// </param>
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collider.CompareTag("Planet"))
+        if (other.CompareTag("Planet"))
         {
             //SceneManager.LoadScene("MainMenu");
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Planet"))
+        {
+            gameManager.SetScore(_playerScore);      //  TODO : Don't set the score always
+        }
+    }*/
 }

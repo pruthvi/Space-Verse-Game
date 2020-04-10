@@ -11,10 +11,16 @@ public class GeneratePlanet : MonoBehaviour
     public float maxPlanetSize = 10.0f;     //  Planet Maximum Size
 
     //  Private Variables
+    private Vector3 _position;                      //  Caching GameObject Position
     private float _overlapRadiusOffset = 5.0f;      //  Overlap Circular Radius Offset
     private Vector3 _planetPos;                     //  New Generated Planet Position
     private float _newPlanetRadius;                 //  New Planet's Radius
     private int _maxSpawnAttempt = 5;               //  Retry attempt if planet overlaps on each other
+
+    private void Awake()
+    {
+        _position = transform.position;
+    }
 
     private void Start()
     {
@@ -50,9 +56,9 @@ public class GeneratePlanet : MonoBehaviour
                 Collider[] colliders = Physics.OverlapSphere(_planetPos, _newPlanetRadius + _overlapRadiusOffset);
 
                 //  Check if it collides with other Planets
-                foreach (var collider in colliders)
+                foreach (var planetCollider in colliders)
                 {
-                    if (collider.CompareTag("Planet"))
+                    if (planetCollider.CompareTag("Planet"))
                     {
                         //  Spawn position is not valid
                         isValidPosition = false;
@@ -63,13 +69,12 @@ public class GeneratePlanet : MonoBehaviour
             //  If It has valid Position then Spawn Planet
             if (isValidPosition)
             {
-                var newPlanet = Instantiate(planet, _planetPos, Quaternion.identity);
+                var newPlanet = Instantiate(planet, _planetPos, Quaternion.identity, gameObject.transform);
                 newPlanet.transform.localScale *= _newPlanetRadius;
-                newPlanet.transform.parent = gameObject.transform;
             }
 
             //  [Optional] Spawning Planet one by one by giving certain time limit between spawn
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.000001f);
         }
 
     }
@@ -83,11 +88,7 @@ public class GeneratePlanet : MonoBehaviour
     //  Generate Random Planet Position inside Distance Radius
     private Vector3 GenerateRandomPos()
     {
-        float x = GenerateRandom(-distToGen, distToGen);
-        float y = GenerateRandom(-distToGen, distToGen);
-        float z = GenerateRandom(0, distToGen);
-        Vector3 pos = new Vector3(x, y, z);
-        return Random.insideUnitSphere * distToGen + pos;
-
+        return (Random.insideUnitSphere * distToGen) + _position;
     }
+
 }
