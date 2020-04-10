@@ -280,16 +280,16 @@ public class SpaceshipController : MonoBehaviour
         {
             if (!_scoreReseted)
             {
+                gameManager.SetScore(_playerScore);
                 _scoreReseted = true;
                 _playerScore = 0;
                 overlayScore.text = " ";    //  TODO: Hide with Animation
-
             }
         }
 
         #endregion
     }
-
+     
     /// <summary>
     /// Applying the Input Controller to Jet using Rigidbody physics
     /// </summary>
@@ -358,7 +358,6 @@ public class SpaceshipController : MonoBehaviour
 
                 StartScoreTimer = true;
 
-                //gameManager.SetScore(playerScore);      //  TODO : Don't set the score always
                 if (debugView)
                     Debug.DrawRay(startPos.position, direction * raycastRadius, Color.red, _debugRayTime);
             }
@@ -387,7 +386,7 @@ public class SpaceshipController : MonoBehaviour
         _transform.rotation = Quaternion.identity;
     }
 
-    /*
+    
     /// <summary>
     /// If Jet Collides with Planet then destroy the collided Planet
     /// </summary>
@@ -398,15 +397,16 @@ public class SpaceshipController : MonoBehaviour
     {
         if (other.CompareTag("Planet"))
         {
+            Debug.Log("KABOOOOM!!....Collided with the planet");
             //SceneManager.LoadScene("MainMenu");
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    /*private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Planet"))
         {
-            gameManager.SetScore(_playerScore);      //  TODO : Don't set the score always
+            
         }
     }*/
 }
