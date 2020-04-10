@@ -67,6 +67,10 @@ public class SpaceshipController : MonoBehaviour
     [SerializeField] private Transform forwardRayCaster = null;
     [SerializeField] private Transform backwardRayCaster = null;
 
+    /// <summary>
+    /// Caching Jet Transform
+    /// </summary>
+    private Transform _transform;
 
     /// <summary>
     /// Reference to Rigidbody for Physics
@@ -166,6 +170,7 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        _transform = transform;
         _rbody = GetComponent<Rigidbody>();
 
         if (gameManager == null)
@@ -214,10 +219,12 @@ public class SpaceshipController : MonoBehaviour
         //  For Testing
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            transform.position = Vector3.zero;
+            ResetPlayer();
         }
 
+        //  Holding Shift key will increase thrust
         thrust = Input.GetKey(KeyCode.LeftShift) ? 600 : 200;
+
 
         #region _____JET MOVEMENT CONTROLLER_____
 
@@ -369,6 +376,15 @@ public class SpaceshipController : MonoBehaviour
     private Vector3 TransformedDirection(Transform currentPos, Vector3 direction)
     {
         return currentPos.TransformDirection(direction);
+    }
+
+    /// <summary>
+    /// Resetting Jet to its starting position
+    /// </summary>
+    public void ResetPlayer()
+    {
+        _transform.position = Vector3.zero;
+        _transform.rotation = Quaternion.identity;
     }
 
     /*
