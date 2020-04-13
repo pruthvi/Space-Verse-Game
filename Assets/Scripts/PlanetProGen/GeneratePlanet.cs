@@ -75,6 +75,13 @@ public class GeneratePlanet : MonoBehaviour
     /// </summary>
     private int _offsetBoundary = 20;
 
+    [Header("Planet Color")] 
+    public float hueMin = 0.5f;
+    public float hueMax = 0.75f;
+    public float saturationMin = 0.5f;
+    public float saturationMax = 1f;
+
+
     #endregion
 
     /// <summary>
@@ -145,6 +152,13 @@ public class GeneratePlanet : MonoBehaviour
             {
                 var newPlanet = Instantiate(planet, _planetPos, Quaternion.identity, gameObject.transform);
                 newPlanet.transform.localScale *= _newPlanetRadius;
+                
+                //  Apply Material  
+                Color randomColor = Random.ColorHSV(hueMin, hueMax, saturationMin, saturationMax, 1, 1);
+                var renderer = newPlanet.GetComponent<MeshRenderer>();
+                Material mat = new Material(Shader.Find("Unlit/Color"));
+                mat.SetColor("_Color", randomColor);
+                renderer.material = mat;
             }
 
             //  [Optional] Spawning Planet one by one by giving certain time limit between spawn

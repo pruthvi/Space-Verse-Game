@@ -13,6 +13,6 @@ public class GameManager : MonoBehaviour
     public void SetScore(int score)
     {
         _totalScore += score;
-        scoreText.text = "Score : " + _totalScore;
+        scoreText.text = _totalScore.ToString();
     }
 }
