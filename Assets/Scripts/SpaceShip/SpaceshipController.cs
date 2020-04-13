@@ -76,7 +76,7 @@ public class SpaceshipController : MonoBehaviour
     /// Reference to Rigidbody for Physics
     /// </summary>
     private Rigidbody _rbody;
-
+    
     /// <summary>
     /// Flag to check if Jet can roll Override
     /// </summary>
@@ -162,7 +162,7 @@ public class SpaceshipController : MonoBehaviour
             _scoreTimer = 0;
         } 
     }
-
+    
     #endregion
 
     /// <summary>
@@ -206,6 +206,7 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        _transform = transform;
         //  Color For Debug Gizmo
         _gizmoColor = Color.red;
         _gizmoColor.a = 0.2f;
@@ -227,7 +228,6 @@ public class SpaceshipController : MonoBehaviour
 
 
         #region _____JET MOVEMENT CONTROLLER_____
-
         _rollOverride = false;
         _pitchOverride = false;
 

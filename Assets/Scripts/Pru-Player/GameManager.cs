@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public Text scoreText;
-
     private int _totalScore = 0;
 
     //  Sets the Score to the ScoreBoard

@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlanetManager : MonoBehaviour
 {
     private MeshRenderer _renderer;     //  Planet's mesh Renderer
-
     public float hueMin = 0.5f;
     public float hueMax = 0.75f;
 

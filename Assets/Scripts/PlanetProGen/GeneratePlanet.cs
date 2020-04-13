@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class GeneratePlanet : MonoBehaviour
 {
-
     #region Public Variables
 
     /// <summary>
@@ -101,10 +100,11 @@ public class GeneratePlanet : MonoBehaviour
     private void Start()
     {
         _gameBoundary.radius = distToGen + _offsetBoundary;
-
+        
         //  Create Galaxy on starting up the scene
         StartCoroutine(CreateGalaxy());
     }
+
 
     /// <summary>
     /// Create Galaxy with the different size planets
@@ -127,7 +127,6 @@ public class GeneratePlanet : MonoBehaviour
 
                 var pos = GenerateRandomPos();
                 _newPlanetRadius = GenerateRandomRadius(minPlanetSize, maxPlanetSize);
-
                 _planetPos = pos;
 
                 //  This position is valid until proven invalid
