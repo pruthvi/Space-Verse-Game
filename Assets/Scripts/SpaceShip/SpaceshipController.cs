@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
 /// Jet Controller controls the Flying movement
@@ -45,25 +45,38 @@ public class SpaceshipController : MonoBehaviour
     [SerializeField] private bool debugView = false;
 
     /// <summary>
-    /// Player Score
+    /// Minimum Score player can make when jet is nearby planet
     /// </summary>
-    [SerializeField] private int playerScore = 0;
+    [Tooltip("Minimum Score player can make when jet is nearby planet")]
+    [SerializeField] private int minPlayerScore = 0;
+
+    /// <summary>
+    /// Screen Overlay Score
+    /// </summary>
+    [SerializeField] private Text overlayScore;
 
     /// <summary>
     /// Reference to GameManager
     /// </summary>
     [SerializeField] private GameManager gameManager = null;
 
+    [Header("RayCast Positions")]
+    [SerializeField] private Transform centreRayCaster = null;
+    [SerializeField] private Transform leftRayCaster = null;
+    [SerializeField] private Transform rightRayCaster = null;
+    [SerializeField] private Transform forwardRayCaster = null;
+    [SerializeField] private Transform backwardRayCaster = null;
+
+    /// <summary>
+    /// Caching Jet Transform
+    /// </summary>
+    private Transform _transform;
+
     /// <summary>
     /// Reference to Rigidbody for Physics
     /// </summary>
     private Rigidbody _rbody;
-
-    /// <summary>
-    /// Caching the Transform of Jet
-    /// </summary>
-    private Transform _transform;
-
+    
     /// <summary>
     /// Flag to check if Jet can roll Override
     /// </summary>
@@ -90,10 +103,66 @@ public class SpaceshipController : MonoBehaviour
     private float _roll = 0f;
 
     /// <summary>
+    /// Player Score
+    /// </summary>
+    private int _playerScore = 0;
+
+    /// <summary>
     /// Debug Gizmo Color
     /// </summary>
     private Color _gizmoColor;
 
+    /// <summary>
+    /// Array of colliders to store the information of collided objects
+    /// </summary>
+    private Collider[] _collider;
+
+    /// <summary>
+    /// Raycast hit for storing the information of collided ray to the object
+    /// </summary>
+    private RaycastHit[] _hit;
+
+    /// <summary>
+    /// Array of different Directions to shot the ray towards
+    /// </summary>
+    private Vector3[] _directions;
+
+    /// <summary>
+    /// Debugging Ray display time
+    /// </summary>
+    [SerializeField] private float _debugRayTime = 0.5f;
+
+    /// <summary>
+    /// Flag to check if score is displaying on screen
+    /// </summary>
+    private bool _isScoreDisplaying = false;
+
+    /// <summary>
+    /// Flag to check if score is reseted
+    /// </summary>
+    private bool _scoreReseted = false;
+
+    /// <summary>
+    /// Score timer to track the elapsed time
+    /// </summary>
+    private float _scoreTimer = 0;
+
+    /// <summary>
+    /// After 2 seconds, overlay score will be hided
+    /// </summary>
+    private int _timeToHideScore = 2;     
+
+    /// <summary>
+    /// Flag to set the values for starting the score hiding timer
+    /// </summary>
+    private bool StartScoreTimer {
+        set
+        {
+            _isScoreDisplaying = value;
+            _scoreTimer = 0;
+        } 
+    }
+    
     #endregion
 
     /// <summary>
@@ -101,12 +170,35 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        _transform = transform;
         _rbody = GetComponent<Rigidbody>();
 
         if (gameManager == null)
         {
             Debug.LogError("Attach reference to GameObject Script");
         }
+
+        if(!centreRayCaster || !leftRayCaster || !rightRayCaster || !forwardRayCaster || !backwardRayCaster)
+        {
+            Debug.LogError("Attach the Transform of Raycaster Position First");
+        }
+
+        //  Initializing RaycastHit and their directions
+        //_collider = new Collider[5];
+        _hit = new RaycastHit[10];
+        _directions = new Vector3[]
+        {
+            Vector3.up,
+            -Vector3.up,
+            Vector3.left,
+            Vector3.right,
+            Vector3.forward,
+            Vector3.back,
+            (Vector3.forward + Vector3.right).normalized,
+            (Vector3.forward + Vector3.left).normalized,
+            (Vector3.back + Vector3.right).normalized,
+            (Vector3.back + Vector3.left).normalized
+        };
     }
 
     /// <summary>
@@ -115,7 +207,6 @@ public class SpaceshipController : MonoBehaviour
     private void Start()
     {
         _transform = transform;
-
         //  Color For Debug Gizmo
         _gizmoColor = Color.red;
         _gizmoColor.a = 0.2f;
@@ -126,6 +217,17 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        //  For Testing
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ResetPlayer();
+        }
+
+        //  Holding Shift key will increase thrust
+        thrust = Input.GetKey(KeyCode.LeftShift) ? 600 : 200;
+
+
+        #region _____JET MOVEMENT CONTROLLER_____
         _rollOverride = false;
         _pitchOverride = false;
 
@@ -155,10 +257,41 @@ public class SpaceshipController : MonoBehaviour
         _yaw = autoYaw;
         _pitch = (_pitchOverride) ? keyboardPitch : autoPitch;
         _roll = (_rollOverride) ? keyboardRoll : autoRoll;
-    }
 
+        #endregion
+
+        #region _____OVERLAY SCORE HIDING TIMER_____
+
+        //  Timer to hide Overlay Score UI
+        if (_isScoreDisplaying)             //  If the Score is currently being displaying then start timer
+        {
+            if (_scoreTimer < _timeToHideScore)
+            {
+                _scoreTimer += Time.deltaTime;
+            }
+            else                            //  When Timer has passed the Time Limit, Reset the flags
+            {
+                _isScoreDisplaying = false;
+                _scoreReseted = false;
+            }
+        }
+
+        if (!_isScoreDisplaying)            //  Reset the OverlayScore and hide it.
+        {
+            if (!_scoreReseted)
+            {
+                gameManager.SetScore(_playerScore);
+                _scoreReseted = true;
+                _playerScore = 0;
+                overlayScore.text = " ";    //  TODO: Hide with Animation
+            }
+        }
+
+        #endregion
+    }
+     
     /// <summary>
-    /// Appling the Input Controller to Jet using Rigidbody physics
+    /// Applying the Input Controller to Jet using Rigidbody physics
     /// </summary>
     private void FixedUpdate()
     {
@@ -170,42 +303,110 @@ public class SpaceshipController : MonoBehaviour
                                             -turnTorque.z * _roll) * forceMult,
                                 ForceMode.Force);
 
-        //  Physics Raycast to check the nearby planets
-        var raycaster = Physics.OverlapSphere(_transform.position, raycastRadius);
+        //  Ray casting from Jet
+        CastRay(centreRayCaster, _directions[0], _hit[0]);          //  UP
+        CastRay(centreRayCaster, _directions[1], _hit[1]);         //  DOWN
         
-        //  Check if it collides with other Planets
-        foreach (var collider in raycaster)
-        {
-            if (collider.CompareTag("Planet"))
-            {
-                //Vector3 pos = collider.ClosestPointOnBounds(collider.transform.position);
+        CastRay(leftRayCaster, _directions[2], _hit[2]);            //  LEFT
+        CastRay(rightRayCaster, _directions[3], _hit[3]);           //  RIGHT
 
-                playerScore++;
-                gameManager.SetScore(playerScore);
+        CastRay(forwardRayCaster, _directions[4], _hit[4]);         //  FORWARD
+        CastRay(backwardRayCaster, _directions[5], _hit[5]);        //  BACKWARD
+
+        CastRay(centreRayCaster, _directions[6], _hit[6]);          //  45 FORWARD RIGHT
+        CastRay(centreRayCaster, _directions[7], _hit[7]);          //  45 FORWARD LEFT
+
+        CastRay(centreRayCaster, _directions[8], _hit[8]);          //  45 BACKWARD RIGHT
+        CastRay(centreRayCaster, _directions[9], _hit[9]);          //  45 BACKWARD LEFT
+        
+        /*
+        var result = Physics.OverlapSphereNonAlloc(centreRayCaster.position, raycastRadius, _collider);
+        for (int i = 0; i < result; i++)
+        {
+            if(_collider[i].CompareTag("Planet"))
+            {
+                Debug.DrawLine(centreRayCaster.position, _collider[i].transform.position, Color.red);
+                //_playerScore += minPlayerScore + (int)(1 / _collider[i].distance);
+                _playerScore += minPlayerScore;
+                overlayScore.text = _playerScore.ToString();
+
+
+                StartScoreTimer = true;
             }
-        }
+        }*/
+        
     }
 
-    private void OnDrawGizmos()
-    {
-        if (!debugView)
-            return;
 
-        Gizmos.color = _gizmoColor;
-        Gizmos.DrawSphere(_transform.position, raycastRadius);
+    /// <summary>
+    /// Shooting a ray
+    /// </summary>
+    /// <param name="startPos">Ray Starting Position</param>
+    /// <param name="directionVector"> Ray shooting Direction</param>
+    /// <param name="hit">Raycast Hit details</param>
+    private void CastRay(Transform startPos, Vector3 directionVector , RaycastHit hit)
+    {
+        var direction = TransformedDirection(startPos, directionVector);
+        if (Physics.Raycast(startPos.position, direction, out hit, raycastRadius))
+        {
+            if (hit.collider.CompareTag("Planet"))
+            {
+                _playerScore += minPlayerScore + (int)(1 / hit.distance);
+
+                //  Start Overlay Score Timer
+                overlayScore.text = _playerScore.ToString();
+
+                StartScoreTimer = true;
+
+                if (debugView)
+                    Debug.DrawRay(startPos.position, direction * raycastRadius, Color.red, _debugRayTime);
+            }
+        }
+        if (debugView)
+            Debug.DrawRay(startPos.position, direction * raycastRadius, Color.blue);
     }
 
     /// <summary>
+    /// Transform the direction to given direction
+    /// </summary>
+    /// <param name="currentPos">Current Position</param>
+    /// <param name="direction">Direction to Transformed</param>
+    /// <returns>Transformed Direction</returns>
+    private Vector3 TransformedDirection(Transform currentPos, Vector3 direction)
+    {
+        return currentPos.TransformDirection(direction);
+    }
+
+    /// <summary>
+    /// Resetting Jet to its starting position
+    /// </summary>
+    public void ResetPlayer()
+    {
+        _transform.position = Vector3.zero;
+        _transform.rotation = Quaternion.identity;
+    }
+
+    
+    /// <summary>
     /// If Jet Collides with Planet then destroy the collided Planet
     /// </summary>
-    /// <param name="collider">
+    /// <param name="other">
     /// Planets
     /// </param>
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collider.CompareTag("Planet"))
+        if (other.CompareTag("Planet"))
         {
+            Debug.Log("KABOOOOM!!....Collided with the planet");
             //SceneManager.LoadScene("MainMenu");
         }
     }
+
+    /*private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Planet"))
+        {
+            
+        }
+    }*/
 }
