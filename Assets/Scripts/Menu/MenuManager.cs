@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
+using GooglePlayGames;
+using UnityEngine.SocialPlatforms;
+
 public class MenuManager : MonoBehaviour
 {
 
@@ -13,7 +17,7 @@ public class MenuManager : MonoBehaviour
 
     public void ShowLeaderboard()
     {
-        // Social.ShowLeaderboardUI();
+         Social.ShowLeaderboardUI();
         Debug.Log("Loads Leaderboard");
     }
 

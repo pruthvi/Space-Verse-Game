@@ -1,5 +1,5 @@
-lastUpgrade=01006
-proj.pluginVersion=0.10.06
+lastUpgrade=01008
+proj.pluginVersion=0.10.08
 proj.AppId=185440419878
 and.BundleId=com.Kasumbal.SpaceVerse
 proj.classDir=Assets

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "185440419878",
+    "firebase_url": "https://space-verse-18469398.firebaseio.com",
+    "project_id": "space-verse-18469398",
+    "storage_bucket": "space-verse-18469398.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:185440419878:android:acbb2daf667779271ee6e7",
+        "android_client_info": {
+          "package_name": "com.Kasumbal.SpaceVerse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "185440419878-vjl7rfk5qh5i49jl4h7nlsic7fiueknm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Kasumbal.SpaceVerse",
+            "certificate_hash": "4bb12abad619cca694d348c9b687d109bbc3bb05"
+          }
+        },
+        {
+          "client_id": "185440419878-2aum4aaoblf4an33i8uuvrb17hv4h5ss.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC72LNvgI0A_i1eqdPgMAV7OaFo3CHRFTU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "185440419878-2aum4aaoblf4an33i8uuvrb17hv4h5ss.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
