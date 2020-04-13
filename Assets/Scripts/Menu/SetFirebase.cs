@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
 
 using GooglePlayGames;
@@ -9,18 +8,24 @@ using UnityEngine.SocialPlatforms;
 using System.Threading.Tasks;
 
 
+
 public class SetFirebase : MonoBehaviour
 {
     string authCode;
-
     void Start()
     {
+        StartFirebase();
+    }
 
+    void StartFirebase()
+    {
         Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
             var dependencyStatus = task.Result;
             if (dependencyStatus == Firebase.DependencyStatus.Available)
             {
+                // Debug.Log("Firebase Ready!!!");
+                SignINPlayGames();
                 // Create and hold a reference to your FirebaseApp,
                 // where app is a Firebase.FirebaseApp property of your application class.
                 //   app = Firebase.FirebaseApp.DefaultInstance;
@@ -34,9 +39,6 @@ public class SetFirebase : MonoBehaviour
                 // Firebase Unity SDK is not safe to use here.
             }
         });
-
-        SignINPlayGames();
-
     }
 
     public void SignINPlayGames()
@@ -52,6 +54,7 @@ public class SetFirebase : MonoBehaviour
             if (success)
             {
                 authCode = PlayGamesPlatform.Instance.GetServerAuthCode();
+
             }
             // else{
             //             statusText.text = "Sign In Failed";
@@ -79,12 +82,11 @@ public class SetFirebase : MonoBehaviour
             }
 
             Firebase.Auth.FirebaseUser newUser = task.Result;
+            Debug.Log("User Signed In Successfully");
             //  statusText.text = "User signed in successfully: "+  newUser.DisplayName + newUser.UserId;
             // Debug.LogFormat("SignInOnClick: User signed in successfully: {0} ({1})", newUser.DisplayName, newUser.UserId);
 
         });
 
     }
-
-
 }
