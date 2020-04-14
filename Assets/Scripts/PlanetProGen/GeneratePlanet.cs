@@ -155,9 +155,7 @@ public class GeneratePlanet : MonoBehaviour
                 //  Apply Material  
                 Color randomColor = Random.ColorHSV(hueMin, hueMax, saturationMin, saturationMax, 1, 1);
                 var renderer = newPlanet.GetComponent<MeshRenderer>();
-                Material mat = new Material(Shader.Find("Unlit/Color"));
-                mat.SetColor("_Color", randomColor);
-                renderer.material = mat;
+                renderer.material.SetColor("_Color", randomColor);
             }
 
             //  [Optional] Spawning Planet one by one by giving certain time limit between spawn

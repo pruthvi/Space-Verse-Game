@@ -901,8 +901,8 @@ MonoBehaviour:
   minPlanetSize: 100
   maxPlanetSize: 300
   _playerController: {fileID: 460529016}
-  hueMin: 0.75
-  hueMax: 0.8
+  hueMin: 0
+  hueMax: 1
   saturationMin: 0.5
   saturationMax: 1
 --- !u!4 &1226516279
