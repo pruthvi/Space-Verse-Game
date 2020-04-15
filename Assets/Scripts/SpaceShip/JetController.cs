@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// Jet Controller controls the Flying movement
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
-public class SpaceshipController : MonoBehaviour
+public class JetController : MonoBehaviour
 {
     #region Public Variables
     /// <summary>
@@ -31,8 +31,6 @@ public class SpaceshipController : MonoBehaviour
     /// Force Multiplier
     /// </summary>
     [Tooltip("Multiplier for all forces")] public float forceMult = 1000f;
-
-    [HideInInspector] public bool enableMovement = true;
 
     #endregion
 
@@ -58,6 +56,11 @@ public class SpaceshipController : MonoBehaviour
     /// Screen Overlay Score
     /// </summary>
     [SerializeField] private Text overlayScore;
+
+    /// <summary>
+    /// Screen Overlay Score
+    /// </summary>
+    [SerializeField] private Text debugTestingText;
 
     /// <summary>
     /// Reference to GameManager
@@ -210,16 +213,10 @@ public class SpaceshipController : MonoBehaviour
         _gizmoColor = Color.red;
         _gizmoColor.a = 0.2f;
 
-        //ResetPlayer();
-        Debug.Log("Awake Called");
-    }
+        overlayScore.text = " ";
+        debugTestingText.text = " ";
 
-    /// <summary>
-    /// Caching the Transform of Jet
-    /// </summary>
-    private void Start()
-    {
-        Debug.Log("Start Called");
+        //ResetPlayer();
     }
 
     /// <summary>
@@ -227,9 +224,6 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if(!enableMovement)
-            return;
-
         //  For Testing
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -396,18 +390,36 @@ public class SpaceshipController : MonoBehaviour
     public void ResetPlayer()
     {
         overlayScore.text = " ";
+        debugTestingText.text = "Gone Out of Range, so Forced Resetted position ";
+        StartCoroutine(Wait3Seconds());
+
+    }
+
+    /// <summary>
+    /// Wait for 3 seconds and restart the player
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator Wait3Seconds()
+    {
+        //  TODO: Display Foggy animation on screen to fade out Jet
+
+        yield return new WaitForSeconds(3);
+        debugTestingText.text = " ";
+
         resetPlayer.RestartPlayer();
     }
 
+    /// <summary>
+    /// Died Screen / GameOver
+    /// </summary>
     private void RestartGame()
     {
         overlayScore.text = " ";
         //  Play Jet Crashing animation
 
         //  Show Player Die Screen
-        resetPlayer.PlayerDieScreen();
+        resetPlayer.PlayerDiedScreen();
     }
-
 
     /// <summary>
     /// If Jet Collides with Planet then destroy the collided Planet
@@ -424,12 +436,4 @@ public class SpaceshipController : MonoBehaviour
             //SceneManager.LoadScene("MainMenu");
         }
     }
-
-    /*private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Planet"))
-        {
-            
-        }
-    }*/
 }

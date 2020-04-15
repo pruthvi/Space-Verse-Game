@@ -37,7 +37,7 @@ public class GeneratePlanet : MonoBehaviour
     /// <summary>
     /// Player Controller
     /// </summary>
-    [SerializeField]private SpaceshipController _playerController;
+    [SerializeField]private JetController _playerController;
 
     /// <summary>
     /// Caching GameObject Position
@@ -91,7 +91,7 @@ public class GeneratePlanet : MonoBehaviour
         _position = transform.position;
         _gameBoundary = GetComponent<SphereCollider>();
         if (!_playerController)
-            _playerController = FindObjectOfType<SpaceshipController>();
+            _playerController = FindObjectOfType<JetController>();
     }
 
     /// <summary>
