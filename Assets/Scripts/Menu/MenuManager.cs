@@ -14,6 +14,11 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("Playground");
     }
 
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+
     public void ShowLeaderboard()
     {
         Social.ShowLeaderboardUI();
