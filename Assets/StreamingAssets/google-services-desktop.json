@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "185440419878-1uqtv01bd5pp8p1q84ro2j946klbtmds.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Kasumbal.SpaceVerse",
+            "certificate_hash": "3a93a792468cd74d237296ff068dcc4b8f3e04c0"
+          }
+        },
+        {
           "client_id": "185440419878-vjl7rfk5qh5i49jl4h7nlsic7fiueknm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
