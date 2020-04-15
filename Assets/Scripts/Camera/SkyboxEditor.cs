@@ -27,6 +27,6 @@ public class SkyboxEditor : MonoBehaviour
     {
         var randomColor = Random.ColorHSV(hueMin, hueMax, 1,1,1,1);
         _skybox.material.SetColor("_Tint", randomColor);
-        RenderSettings.fogColor = randomColor;
+        RenderSettings.fogColor = Color.Lerp(randomColor, Color.black, 0.5f);
     }
 }

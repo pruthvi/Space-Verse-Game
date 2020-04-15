@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using Cinemachine;
+using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
@@ -30,6 +32,8 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     [Tooltip("Multiplier for all forces")] public float forceMult = 1000f;
 
+    [HideInInspector] public bool enableMovement = true;
+
     #endregion
 
     #region Private Variables
@@ -59,6 +63,8 @@ public class SpaceshipController : MonoBehaviour
     /// Reference to GameManager
     /// </summary>
     [SerializeField] private GameManager gameManager = null;
+
+    [SerializeField] private ResetPlayer resetPlayer = null;
 
     [Header("RayCast Positions")]
     [SerializeField] private Transform centreRayCaster = null;
@@ -173,7 +179,7 @@ public class SpaceshipController : MonoBehaviour
         _transform = transform;
         _rbody = GetComponent<Rigidbody>();
 
-        if (gameManager == null)
+        if (!gameManager || !resetPlayer)
         {
             Debug.LogError("Attach reference to GameObject Script");
         }
@@ -199,6 +205,13 @@ public class SpaceshipController : MonoBehaviour
             (Vector3.back + Vector3.right).normalized,
             (Vector3.back + Vector3.left).normalized
         };
+
+        //  Color For Debug Gizmo
+        _gizmoColor = Color.red;
+        _gizmoColor.a = 0.2f;
+
+        //ResetPlayer();
+        Debug.Log("Awake Called");
     }
 
     /// <summary>
@@ -206,10 +219,7 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        _transform = transform;
-        //  Color For Debug Gizmo
-        _gizmoColor = Color.red;
-        _gizmoColor.a = 0.2f;
+        Debug.Log("Start Called");
     }
 
     /// <summary>
@@ -217,6 +227,9 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        if(!enableMovement)
+            return;
+
         //  For Testing
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -382,11 +395,20 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     public void ResetPlayer()
     {
-        _transform.position = Vector3.zero;
-        _transform.rotation = Quaternion.identity;
+        overlayScore.text = " ";
+        resetPlayer.RestartPlayer();
     }
 
-    
+    private void RestartGame()
+    {
+        overlayScore.text = " ";
+        //  Play Jet Crashing animation
+
+        //  Show Player Die Screen
+        resetPlayer.PlayerDieScreen();
+    }
+
+
     /// <summary>
     /// If Jet Collides with Planet then destroy the collided Planet
     /// </summary>
@@ -398,6 +420,7 @@ public class SpaceshipController : MonoBehaviour
         if (other.CompareTag("Planet"))
         {
             Debug.Log("KABOOOOM!!....Collided with the planet");
+            RestartGame();
             //SceneManager.LoadScene("MainMenu");
         }
     }
