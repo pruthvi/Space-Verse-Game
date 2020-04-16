@@ -1,11 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using Cinemachine;
+using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
 /// Jet Controller controls the Flying movement
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
-public class SpaceshipController : MonoBehaviour
+public class JetController : MonoBehaviour
 {
     #region Public Variables
     /// <summary>
@@ -56,9 +58,16 @@ public class SpaceshipController : MonoBehaviour
     [SerializeField] private Text overlayScore;
 
     /// <summary>
+    /// Screen Overlay Score
+    /// </summary>
+    [SerializeField] private Text debugTestingText;
+
+    /// <summary>
     /// Reference to GameManager
     /// </summary>
     [SerializeField] private GameManager gameManager = null;
+
+    [SerializeField] private ResetPlayer resetPlayer = null;
 
     [Header("RayCast Positions")]
     [SerializeField] private Transform centreRayCaster = null;
@@ -173,7 +182,7 @@ public class SpaceshipController : MonoBehaviour
         _transform = transform;
         _rbody = GetComponent<Rigidbody>();
 
-        if (gameManager == null)
+        if (!gameManager || !resetPlayer)
         {
             Debug.LogError("Attach reference to GameObject Script");
         }
@@ -199,17 +208,15 @@ public class SpaceshipController : MonoBehaviour
             (Vector3.back + Vector3.right).normalized,
             (Vector3.back + Vector3.left).normalized
         };
-    }
 
-    /// <summary>
-    /// Caching the Transform of Jet
-    /// </summary>
-    private void Start()
-    {
-        _transform = transform;
         //  Color For Debug Gizmo
         _gizmoColor = Color.red;
         _gizmoColor.a = 0.2f;
+
+        overlayScore.text = " ";
+        debugTestingText.text = " ";
+
+        //ResetPlayer();
     }
 
     /// <summary>
@@ -382,11 +389,38 @@ public class SpaceshipController : MonoBehaviour
     /// </summary>
     public void ResetPlayer()
     {
-        _transform.position = Vector3.zero;
-        _transform.rotation = Quaternion.identity;
+        overlayScore.text = " ";
+        debugTestingText.text = "Gone Out of Range, so Forced Resetted position ";
+        StartCoroutine(Wait3Seconds());
+
     }
 
-    
+    /// <summary>
+    /// Wait for 3 seconds and restart the player
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator Wait3Seconds()
+    {
+        //  TODO: Display Foggy animation on screen to fade out Jet
+
+        yield return new WaitForSeconds(3);
+        debugTestingText.text = " ";
+
+        resetPlayer.RestartPlayer();
+    }
+
+    /// <summary>
+    /// Died Screen / GameOver
+    /// </summary>
+    private void RestartGame()
+    {
+        overlayScore.text = " ";
+        //  Play Jet Crashing animation
+
+        //  Show Player Die Screen
+        resetPlayer.PlayerDiedScreen();
+    }
+
     /// <summary>
     /// If Jet Collides with Planet then destroy the collided Planet
     /// </summary>
@@ -398,15 +432,8 @@ public class SpaceshipController : MonoBehaviour
         if (other.CompareTag("Planet"))
         {
             Debug.Log("KABOOOOM!!....Collided with the planet");
+            RestartGame();
             //SceneManager.LoadScene("MainMenu");
         }
     }
-
-    /*private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Planet"))
-        {
-            
-        }
-    }*/
 }

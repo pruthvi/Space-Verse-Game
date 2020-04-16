@@ -37,7 +37,7 @@ public class GeneratePlanet : MonoBehaviour
     /// <summary>
     /// Player Controller
     /// </summary>
-    [SerializeField]private SpaceshipController _playerController;
+    [SerializeField]private JetController _playerController;
 
     /// <summary>
     /// Caching GameObject Position
@@ -91,7 +91,7 @@ public class GeneratePlanet : MonoBehaviour
         _position = transform.position;
         _gameBoundary = GetComponent<SphereCollider>();
         if (!_playerController)
-            _playerController = FindObjectOfType<SpaceshipController>();
+            _playerController = FindObjectOfType<JetController>();
     }
 
     /// <summary>
@@ -155,9 +155,7 @@ public class GeneratePlanet : MonoBehaviour
                 //  Apply Material  
                 Color randomColor = Random.ColorHSV(hueMin, hueMax, saturationMin, saturationMax, 1, 1);
                 var renderer = newPlanet.GetComponent<MeshRenderer>();
-                Material mat = new Material(Shader.Find("Unlit/Color"));
-                mat.SetColor("_Color", randomColor);
-                renderer.material = mat;
+                renderer.material.SetColor("_Color", randomColor);
             }
 
             //  [Optional] Spawning Planet one by one by giving certain time limit between spawn

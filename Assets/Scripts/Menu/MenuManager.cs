@@ -11,7 +11,11 @@ public class MenuManager : MonoBehaviour
 
     public AudioClip nextLevelSound; // Gets Main Game Sound
 
-    // Function to show Leaderboard
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+
     public void ShowLeaderboard()
     {
         Social.ShowLeaderboardUI();
