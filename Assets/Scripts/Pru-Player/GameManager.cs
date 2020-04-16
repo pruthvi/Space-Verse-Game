@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms;
+using GooglePlayGames;
 
 /// <summary>
 /// Responsible for managing Overall GameScoring and UI
@@ -48,6 +50,7 @@ public class GameManager : MonoBehaviour
     public void DisplayTotalScore()
     {
         finalScore.SetActive(true);
+            PostScoreOnLeaderboard();
 
         var scoreCount = 1;
         while (_totalScore >= scoreCount)
