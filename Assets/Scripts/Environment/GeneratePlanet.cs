@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GeneratePlanet : MonoBehaviour
 {
@@ -29,6 +31,11 @@ public class GeneratePlanet : MonoBehaviour
     /// Planet Maximum Size
     /// </summary>
     public float maxPlanetSize = 10.0f;
+
+    /// <summary>
+    /// Get the Color Palette from the List of PreDefined colors
+    /// </summary>
+    public ColorPaletteGenerator colorPalette;
 
     #endregion
 
@@ -74,12 +81,18 @@ public class GeneratePlanet : MonoBehaviour
     /// </summary>
     private int _offsetBoundary = 20;
 
+    /// <summary>
+    /// Random Color Palette
+    /// </summary>
+    [HideInInspector] public Color[] _colors;
+
     [Header("Planet Color")] 
     public float hueMin = 0.5f;
     public float hueMax = 0.75f;
     public float saturationMin = 0.5f;
     public float saturationMax = 1f;
 
+    public SkyboxEditor skyboxEditor;
 
     #endregion
 
@@ -100,7 +113,9 @@ public class GeneratePlanet : MonoBehaviour
     private void Start()
     {
         _gameBoundary.radius = distToGen + _offsetBoundary;
-        
+
+        _colors = colorPalette.GetColor(Random.Range(0,colorPalette.colorPalettes.Length));
+        //skyboxEditor.colorGenerated.Invoke();
         //  Create Galaxy on starting up the scene
         StartCoroutine(CreateGalaxy());
     }
@@ -153,9 +168,10 @@ public class GeneratePlanet : MonoBehaviour
                 newPlanet.transform.localScale *= _newPlanetRadius;
                 
                 //  Apply Material  
-                Color randomColor = Random.ColorHSV(hueMin, hueMax, saturationMin, saturationMax, 1, 1);
+                //Color randomColor = Random.ColorHSV(hueMin, hueMax, saturationMin, saturationMax, 1, 1);
+                var randomColor = Random.Range(0, 4);
                 var renderer = newPlanet.GetComponent<MeshRenderer>();
-                renderer.material.SetColor("_Color", randomColor);
+                renderer.material.SetColor("_Color", _colors[randomColor]);
             }
 
             //  [Optional] Spawning Planet one by one by giving certain time limit between spawn
