@@ -675,7 +675,10 @@ MonoBehaviour:
   debugView: 0
   minPlayerScore: 1
   overlayScore: {fileID: 0}
+  outOfRangeEffect: {fileID: 0}
+  debugTestingText: {fileID: 0}
   gameManager: {fileID: 0}
+  resetPlayer: {fileID: 0}
   centreRayCaster: {fileID: 4326319008046781121}
   leftRayCaster: {fileID: 2101771612}
   rightRayCaster: {fileID: 1208393012}

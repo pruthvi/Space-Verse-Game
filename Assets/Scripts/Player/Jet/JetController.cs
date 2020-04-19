@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using Cinemachine;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,6 +32,8 @@ public class JetController : MonoBehaviour
     /// </summary>
     [Tooltip("Multiplier for all forces")] public float forceMult = 1000f;
 
+    [HideInInspector] public Action<bool> fadeOut;
+
     #endregion
 
     #region Private Variables
@@ -56,6 +58,11 @@ public class JetController : MonoBehaviour
     /// Screen Overlay Score
     /// </summary>
     [SerializeField] private Text overlayScore;
+
+    /// <summary>
+    /// Overlay out of range effect
+    /// </summary>
+    [SerializeField] private GameObject outOfRangeEffect;            
 
     /// <summary>
     /// Screen Overlay Score
@@ -85,7 +92,9 @@ public class JetController : MonoBehaviour
     /// Reference to Rigidbody for Physics
     /// </summary>
     private Rigidbody _rbody;
-    
+
+    private OverlayDarkEffect _darkEffect;
+
     /// <summary>
     /// Flag to check if Jet can roll Override
     /// </summary>
@@ -181,8 +190,10 @@ public class JetController : MonoBehaviour
     {
         _transform = transform;
         _rbody = GetComponent<Rigidbody>();
+        _darkEffect = outOfRangeEffect.GetComponent<OverlayDarkEffect>();
+        outOfRangeEffect.SetActive(false);
 
-        if (!gameManager || !resetPlayer)
+        if (!gameManager || !resetPlayer || !outOfRangeEffect)
         {
             Debug.LogError("Attach reference to GameObject Script");
         }
@@ -401,12 +412,33 @@ public class JetController : MonoBehaviour
     /// <returns></returns>
     private IEnumerator Wait3Seconds()
     {
-        //  TODO: Display Foggy animation on screen to fade out Jet
+        //  Display Foggy animation on screen to fade out Jet
+        DarkEffectFadeOut(1);
 
         yield return new WaitForSeconds(3);
         debugTestingText.text = " ";
 
         resetPlayer.RestartPlayer();
+    }
+
+    /// <summary>
+    /// Fade IN dark Overlay Effect
+    /// </summary>
+    public void DarkEffectFadeIn(float speedMultiplier)
+    {
+        _darkEffect.canFadeOut = false;
+        _darkEffect.canFadeIn = true;
+        _darkEffect.speedMultiplier = speedMultiplier;
+    }
+
+    /// <summary>
+    /// Fade OUT dark Overlay Effect
+    /// </summary>
+    public void DarkEffectFadeOut(float speedMultiplier)
+    {
+        outOfRangeEffect.SetActive(true);
+        _darkEffect.canFadeOut = true;
+        _darkEffect.speedMultiplier = speedMultiplier;
     }
 
     /// <summary>

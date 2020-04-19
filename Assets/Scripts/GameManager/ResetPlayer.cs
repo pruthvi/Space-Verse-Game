@@ -53,6 +53,7 @@ public class ResetPlayer : MonoBehaviour
     /// </summary>
     public void RestartGame()
     {
+        jetController.DarkEffectFadeOut(100f);
         gameManager.InitializeGame();
         RestartPlayer();
     }
@@ -92,6 +93,10 @@ public class ResetPlayer : MonoBehaviour
         //  Init with updated changes
         jetGameObject.SetActive(true);
         UpdateCameraSetting();
+        
+        //  Disable Overlay Dark Effect
+        jetController.DarkEffectFadeIn(1);
+
         EnablePlayerMovement();
 
         playerRestartAnim.SetTrigger(resetCam);
