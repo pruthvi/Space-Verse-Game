@@ -36,11 +36,21 @@ public class GeneratePlanet : MonoBehaviour
     /// Get the Color Palette from the List of PreDefined colors
     /// </summary>
     public ColorPaletteGenerator colorPalette;
+    
+    /// <summary>
+    /// Random Color Palette
+    /// </summary>
+    [HideInInspector] public Color[] _colors;
 
     #endregion
 
     #region Private Variables
 
+    /// <summary>
+    /// Cached Transform property
+    /// </summary>
+    private Transform _transform;
+    
     /// <summary>
     /// Player Controller
     /// </summary>
@@ -82,17 +92,9 @@ public class GeneratePlanet : MonoBehaviour
     private int _offsetBoundary = 20;
 
     /// <summary>
-    /// Random Color Palette
+    /// Color Palette array length
     /// </summary>
-    [HideInInspector] public Color[] _colors;
-
-    [Header("Planet Color")] 
-    public float hueMin = 0.5f;
-    public float hueMax = 0.75f;
-    public float saturationMin = 0.5f;
-    public float saturationMax = 1f;
-
-    public SkyboxEditor skyboxEditor;
+    private int _colorsLength = 0;
 
     #endregion
 
@@ -102,6 +104,7 @@ public class GeneratePlanet : MonoBehaviour
     private void Awake()
     {
         _position = transform.position;
+        _transform = transform;
         _gameBoundary = GetComponent<SphereCollider>();
         if (!_playerController)
             _playerController = FindObjectOfType<JetController>();
@@ -114,8 +117,12 @@ public class GeneratePlanet : MonoBehaviour
     {
         _gameBoundary.radius = distToGen + _offsetBoundary;
 
+        //  Get the Random Color Palette
         _colors = colorPalette.GetColor(Random.Range(0,colorPalette.colorPalettes.Length));
-        //skyboxEditor.colorGenerated.Invoke();
+        _colorsLength = _colors.Length;
+
+        DestroyGalaxy();
+
         //  Create Galaxy on starting up the scene
         StartCoroutine(CreateGalaxy());
     }
@@ -168,8 +175,7 @@ public class GeneratePlanet : MonoBehaviour
                 newPlanet.transform.localScale *= _newPlanetRadius;
                 
                 //  Apply Material  
-                //Color randomColor = Random.ColorHSV(hueMin, hueMax, saturationMin, saturationMax, 1, 1);
-                var randomColor = Random.Range(0, 4);
+                var randomColor = Random.Range(0, _colorsLength);
                 var renderer = newPlanet.GetComponent<MeshRenderer>();
                 renderer.material.SetColor("_Color", _colors[randomColor]);
             }
@@ -177,7 +183,6 @@ public class GeneratePlanet : MonoBehaviour
             //  [Optional] Spawning Planet one by one by giving certain time limit between spawn
             yield return new WaitForSeconds(0.000001f);
         }
-
     }
 
     /// <summary>
@@ -198,6 +203,17 @@ public class GeneratePlanet : MonoBehaviour
     private Vector3 GenerateRandomPos()
     {
         return (Random.insideUnitSphere * distToGen) + _position;
+    }
+
+    /// <summary>
+    /// Clears all the generated Planets
+    /// </summary>
+    public void DestroyGalaxy()
+    {
+        foreach (Transform planet in _transform)
+        {
+            GameObject.Destroy(planet.gameObject);
+        }
     }
 
     /// <summary>
@@ -223,5 +239,13 @@ public class GeneratePlanet : MonoBehaviour
             _playerController.ResetPlayer();
             Debug.Log("Player Exited the Game Boundary");
         }
+    }
+
+    /// <summary>
+    /// When this script is Destroyed
+    /// </summary>
+    private void OnDestroy()
+    {
+        DestroyGalaxy();
     }
 }

@@ -22,6 +22,9 @@ public class JetController : MonoBehaviour
     [Header("Physics")]
     [Tooltip("Force to push plane forwards with")] public float thrust = 100f;
 
+    public float rotationSpeedX = 3.0f;
+    public float rotationSpeedY = 1.5f;
+
     /// <summary>
     /// Turning Angle
     /// </summary>
@@ -242,7 +245,7 @@ public class JetController : MonoBehaviour
         }
 
         //  Holding Shift key will increase thrust
-        thrust = Input.GetKey(KeyCode.LeftShift) ? 600 : 200;
+        //thrust = Input.GetKey(KeyCode.LeftShift) ? 100 : 200;
 
 
         #region _____JET MOVEMENT CONTROLLER_____
@@ -251,13 +254,14 @@ public class JetController : MonoBehaviour
 
         float keyboardRoll = joystickController.Horizontal;
         //float keyboardRoll = Input.GetAxis("Horizontal");
+        float keyboardPitch = joystickController.Vertical;
 
-        if (Mathf.Abs(keyboardRoll) > .25f)
+        /*if (Mathf.Abs(keyboardRoll) > .25f)
         {
             _rollOverride = true;
         }
 
-        float keyboardPitch = -joystickController.Vertical;
+        
         //float keyboardPitch = Input.GetAxis("Vertical");
 
         if (Mathf.Abs(keyboardPitch) > .25f)
@@ -275,6 +279,30 @@ public class JetController : MonoBehaviour
         _yaw = autoYaw;
         _pitch = (_pitchOverride) ? keyboardPitch : autoPitch;
         _roll = (_rollOverride) ? keyboardRoll : autoRoll;
+        */
+        
+        var moveVector = _transform.forward * thrust;
+
+        var yaw = keyboardRoll * _transform.right * rotationSpeedX * Time.deltaTime;
+        var pitch = keyboardPitch * _transform.up * rotationSpeedY * Time.deltaTime;
+        var direction = yaw + pitch;
+
+        var maxX = Quaternion.LookRotation(moveVector + direction).eulerAngles.x;
+
+        if (maxX < 90 && maxX > 70 || maxX > 270 && maxX < 290)
+        {
+
+        }
+        else
+        {
+            moveVector += direction;
+
+            _transform.rotation = Quaternion.LookRotation(moveVector);
+        }
+        _rbody.AddForce(moveVector);
+
+
+
 
         #endregion
 
@@ -315,12 +343,12 @@ public class JetController : MonoBehaviour
     {
         // Ultra simple flight where the plane just gets pushed forward and manipulated
         // with torques to turn.
-        _rbody.AddRelativeForce(Vector3.forward * thrust * forceMult, ForceMode.Force);
+        /*_rbody.AddRelativeForce(Vector3.forward * thrust * forceMult, ForceMode.Force);
         _rbody.AddRelativeTorque(new Vector3(turnTorque.x * _pitch,
                                             turnTorque.y * _yaw,
                                             -turnTorque.z * _roll) * forceMult,
                                 ForceMode.Force);
-
+        */
         //  Ray casting from Jet
         CastRay(centreRayCaster, _directions[0], _hit[0]);          //  UP
         CastRay(centreRayCaster, _directions[1], _hit[1]);         //  DOWN

@@ -10,8 +10,6 @@ public class SkyboxEditor : MonoBehaviour
 
     [SerializeField] private GeneratePlanet planetManager;
 
-    public Action colorGenerated;
-
     private void Awake()
     {
         _skybox = GetComponent<Skybox>();
@@ -24,19 +22,15 @@ public class SkyboxEditor : MonoBehaviour
 
     private void Start()
     {
-        //colorGenerated += ApplySkyboxColor;
         ApplySkyboxColor();
-        //ApplySkyboxColor(planetManager.hueMin, planetManager.hueMax);
     }
 
-    /*public void ApplySkyboxColor(float hueMin, float hueMax)
-    {
-        var randomColor = Random.ColorHSV(hueMin, hueMax, 1,1,1,1);
-        _skybox.material.SetColor("_Tint", randomColor);
-    }*/
-
+    /// <summary>
+    /// Apply Skybox Color from the color palette
+    /// </summary>
     public void ApplySkyboxColor()
     {
+        //  Get the first color from the Color Palette
         var color = planetManager._colors[0];
         _skybox.material.SetColor("_Tint", color);
     }
